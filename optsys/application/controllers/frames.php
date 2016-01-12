@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Home extends CI_Controller {
+class Frames extends CI_Controller {
 
 	/**
 	 * index()	 
@@ -8,11 +8,12 @@ class Home extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('home');
+		$this->load->view('frameshome');
 	}
 	
+	public function add()
+	{
+		$this->load->view('addframe');
+	}
 	
-}
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+}//end of class
