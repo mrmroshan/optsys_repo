@@ -35,7 +35,14 @@
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">prescriptions</a></li>
             <li><a href="#about">Patients</a></li>
-            <li><a href="<?php echo base_url('index.php/frames/add');?>">Frames</a></li>
+            <li>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Frames<span class="caret"></span></a>
+            
+	          <ul class="dropdown-menu">
+	            <li><a href="#">List All Frames</a></li>
+	            <li><a href="<?php echo base_url('index.php/frames/add');?>">Add New Frame</a></li>	            
+	          </ul>
+            </li>
             <li><a href="#about">Lenses</a></li>
             <li><a href="#contact">Reports</a></li>
           </ul>
