@@ -40,40 +40,62 @@
 	    <input type="text" class="form-control col-md-2" id="frame_serial_no" name="frame_serial_no" placeholder="Serial No" value="<?php echo $fields['frame_serial_no']?>">
 	  </div>	
 	
-	  <div class="form-group ">
+	  <!-- <div class="form-group ">
 	    <label for="frame_material">Frame Material</label>	    
 	    <?php 
 	    $other = ' class="form-control" id="frame_material" ';
 	    $options = array('4'  => 'Staff','3'=> 'Manager');
 		echo form_dropdown('frame_material', $options,$fields['frame_material'],$other);
 		?>
-	  </div>
+	  </div>-->
 	  
-	 <div class="form-group">
+	 <!-- <div class="form-group">
 	    <label for="frame_type">Frame Type</label>	    
 	    <?php 
 	    $other = ' class="form-control " id="frame_type"';
 	    $options = array('4'  => 'Staff','3'=> 'Manager');
 		echo form_dropdown('frame_type', $options,$fields['frame_type'],$other);
 		?>
-	  </div>
+	  </div>-->
 	
-	 <div class="form-group">
+	 <!-- <div class="form-group">
 	    <label for="frame_brand">Frame Brand</label>	    
+	    <?php	    
+	    $other = ' class="form-control " id="sup_id"';
+	    for($i=0;$i<count($suplist);$i++){
+	    	$brands[$suplist[$i]['brand_id']] = $suplist[$i]['brand_name'];
+	    }
+		echo form_dropdown('frame_brand', $brands,$fields['frame_brand'],$other);
+		?>
+	  </div>-->
+	  
+	 <div class="form-group">
+	    <label for="sup_id">Frame Supplier</label>
+	    	    
 	    <?php 
-	    $other = ' class="form-control " id="frame_brand"';
-	    $options = array('4'  => 'Staff','3'=> 'Manager');
-		echo form_dropdown('frame_brand', $options,$fields['frame_brand'],$other);
+	    $other = ' class="form-control " id="sup_id"';
+	    for($i=0;$i<count($suplist);$i++){
+	    	$sups[$suplist[$i]['sup_id']] = $suplist[$i]['company_name'];  
+	    }
+		
+	    echo form_dropdown('sup_id', $sups,$fields['sup_id'],$other);
 		?>
 	  </div>
 	  
-	 <div class="form-group">
-	    <label for="sup_id">Frame Supplier</label>	    
-	    <?php 
-	    $other = ' class="form-control " id="sup_id"';
-	    $options = array('4'  => 'Staff','3'=> 'Manager');
-		echo form_dropdown('sup_id', $options,$fields['sup_id'],$other);
-		?>
+	  <div class="form-group">
+	    <label for="frame_type">Frame Type</label>
+	    <input type="text" class="form-control " id="frame_type" name="frame_type" placeholder="Frame Type" value="<?php echo $fields['frame_type']?>" >
+	  </div>
+
+	  <div class="form-group">
+	    <label for="frame_material">Frame Material</label>
+	    <input type="text" class="form-control " id="frame_material" name="frame_material" placeholder="Frame Material" value="<?php echo $fields['frame_material']?>" >
+	  </div>
+	  
+	  
+	  <div class="form-group">
+	    <label for="frame_brand">Frame Brand</label>
+	    <input type="text" class="form-control " id="frame_brand" name="frame_brand" placeholder="Frame Brand" value="<?php echo $fields['frame_brand']?>" >
 	  </div>
 	  
 	  <div class="form-group">

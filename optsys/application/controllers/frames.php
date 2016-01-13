@@ -6,6 +6,8 @@ class Frames extends CI_Controller {
 	
 		parent::__construct();	
 		$this->load->model('frames_model');
+		$this->load->model('suppliers_model');
+		//$this->load->model('brands_model');
 	}//end of function
 
 	/**
@@ -27,6 +29,10 @@ class Frames extends CI_Controller {
 		$post = $this->input->post(null);
 		$form_data['fields'] = $post;
 		
+		//suplist
+		$record_set = $this->suppliers_model->select_records('*',200,null,null);
+		$form_data['suplist'] = $record_set['result_set'];
+				
 		if(isset($post['btnSave'])){
 			
 			$validation = $this->validate_form();
@@ -151,7 +157,11 @@ class Frames extends CI_Controller {
 		$this->form_validation->set_rules('qty', 'Frame qty', 'required');
 		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'required');
 		$this->form_validation->set_rules('details', 'Description', 'required');
-		$this->form_validation->set_rules('details', 'Description', 'required');
+		$this->form_validation->set_rules('qty', 'Frame qty', 'integer');
+		$this->form_validation->set_rules('price', 'Frame Price', 'decimal');
+		$this->form_validation->set_rules('cost', 'Frame Cost', 'decimal');
+		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'integer');
+		$this->form_validation->set_rules('frame_size', 'Frame Size', 'integer');
 		
 		if($edit == false){
 				
@@ -169,7 +179,7 @@ class Frames extends CI_Controller {
 	public function index($fields_list = "*", $limit = 25 , $offset = 0){
 	
 	$this->output->enable_profiler(false);
-	$form_data = array();
+	$form_data = array(); 
 	$record_set = $this->Category_Model->select_records('*',$limit,$offset);
 	$form_data['record_set'] = $record_set;
 	$form_data['limit'] = $limit;
