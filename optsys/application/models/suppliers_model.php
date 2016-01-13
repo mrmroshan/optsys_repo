@@ -26,14 +26,8 @@ class Suppliers_model extends CI_Model{
 			$this->db->where($where_condition);
 		}
 		$query = $this->db->get($this->table_name, $limit, $offset);			
-		$results['result_set'] = $query->result_array();
-				
-		//for pagination
-		if(!empty($where_condition)){
-			$this->db->where($where_condition);
-		}
-		$query2 = $this->db->get($this->table_name);
-		$results['total_records'] =  $query2->num_rows();
+		$results['result_set'] = $query->result_array();		
+		$results['total_records'] =  $query->num_rows();
 		
 		return $results;
 		

@@ -52,7 +52,7 @@ class Frames extends CI_Controller {
 						$form_data['gen_message'] = array(
 								'type' => 'success',
 								'text' => 'Data saved!');
-						$this->redirect_home(site_url());
+						$this->redirect_home(site_url('frames/index'));
 					}else{
 	
 						$form_data['gen_message'] = array(
@@ -199,7 +199,7 @@ class Frames extends CI_Controller {
 	public function produce_grid_feed($limit=25,$offset=0){
 	
 	
-		$record_set = $this->frames_model->select_records('*',$limit,$offset,array('company_id' => $this->company_id));
+		$record_set = $this->frames_model->select_records('*',$limit,$offset);
 	
 		// init xml writer
 		$xml = new Xml_writer();
@@ -208,17 +208,17 @@ class Frames extends CI_Controller {
 		$xml->initiate();
 	
 		foreach($record_set['result_set'] as $record ){
-	
-			$xml->startBranch('row',array('id' =>$record['dep_id']));
-			$xml->addNode('cell',$record['dep_id'],null, true);
-			$xml->addNode('cell',$record['dep_name'],null, true);
-			$xml->addNode('cell','<a href="'.
-					site_url('departments/edit/'.$record['dep_id']).'" >Edit</a> '.
-					'| '.
-					'<a href="'.site_url('departments/delete/'.$record['dep_id']).'" onclick= "return confirm(\'Are you sure you want to delete this item?\');" >Delete',null, true);
 				
-			$xml->endBranch();
-	
+			$xml->startBranch('row',array('id' =>$record['frame_id']));
+			$xml->addNode('cell',$record['frame_id'],null, true);
+			$xml->addNode('cell',$record['frame_serial_no'],null, true);
+			$xml->addNode('cell',$record['frame_material'],null, true);
+			$xml->addNode('cell',$record['frame_type'],null, true);
+			$sup_record_set = $this->suppliers_model->select_records('*',1,0,array('sup_id' => $record['sup_id']));			
+			$xml->addNode('cell',$sup_record_set['result_set'][0]['company_name'],null, true);
+			$xml->addNode('cell',$record['price'],null, true);
+			$xml->addNode('cell',$record['qty'],null, true);			
+			$xml->endBranch();	
 		}
 	
 		$data = array();
