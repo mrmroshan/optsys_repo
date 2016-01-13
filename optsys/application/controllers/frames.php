@@ -41,8 +41,11 @@ class Frames extends CI_Controller {
 				//remove submit button from the array
 				foreach($post as $k => $v){
 					if($k == 'btnSave')unset($post[$k]);
-				}				
+				}
+				
 				$save_data =$post;
+				$post['added_date'] = date('Y-m-d');
+				$post['added_by'] = '1';
 					
 				if(!$this->frames_model->is_exist($save_data)){
 						
@@ -217,7 +220,10 @@ class Frames extends CI_Controller {
 			$sup_record_set = $this->suppliers_model->select_records('*',1,0,array('sup_id' => $record['sup_id']));			
 			$xml->addNode('cell',$sup_record_set['result_set'][0]['company_name'],null, true);
 			$xml->addNode('cell',$record['price'],null, true);
-			$xml->addNode('cell',$record['qty'],null, true);			
+			$xml->addNode('cell',$record['qty'],null, true);	
+			$xml->addNode('cell',$record['added_date'],null, true);
+			$action = ' Edit  |  Delete ';
+			$xml->addNode('cell',$action,null, true);
 			$xml->endBranch();	
 		}
 	
