@@ -222,7 +222,8 @@ class Frames extends CI_Controller {
 			$xml->addNode('cell',$record['price'],null, true);
 			$xml->addNode('cell',$record['qty'],null, true);	
 			$xml->addNode('cell',$record['added_date'],null, true);
-			$action = ' Edit  |  Delete ';
+			$action = '<a href="javascript:void(0);" onclick="edit_record('.$record['frame_id'].')">Edit</a>  |  
+					   <a href="javascript:void(0);" onclick="delete_record('.$record['frame_id'].')">Delete</a> ';
 			$xml->addNode('cell',$action,null, true);
 			$xml->endBranch();	
 		}
@@ -250,16 +251,17 @@ class Frames extends CI_Controller {
 	 */
 	public function delete($id=null){
 	
-		$record_set = $this->frames_model->select_records('*',null,null,array('dep_id'=>$id));
+		$record_set = $this->frames_model->select_records('*',null,null,array('frame_id'=>$id));
 		$form_data['form_data_val'] = $record_set['result_set'][0];
 	
-		$data = array('dep_id' => $id);
+		$data = array('frame_id' => $id);
 		$status = $this->frames_model->delete($data);
 	
-		if($status == 1){
-	
-			$this->load->view('departments/delete',$form_data);
-			$this->redirect_home(site_url('departments/dashboard'));
+		if($status == 1){	
+			$form_data['gen_message'] = array(
+					'type' => 'success',
+					'text' => 'Record has been deleted');
+			$this->load->view('frameshome',$form_data);			
 		}
 	
 	}//end of delete
