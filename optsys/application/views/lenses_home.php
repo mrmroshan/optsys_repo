@@ -36,7 +36,7 @@
 
 	<div class="row ">	
 	<dir class="col-sm-12 col-md-8">
-	<h1>Frame Stock</h1>
+	<h1>Lenses Stock</h1>
 	</dir>
 	<dir class="col-sm-12 col-md-4 text-right">	
 	<a class="btn btn-primary" href="<?php echo site_url('/frames/add')?>" role="button">Add New</a>
@@ -57,17 +57,14 @@
 mygrid = new dhtmlXGridObject('gridbox');
 mygrid.setImagePath("<?php echo base_url('dhtmlx/dhtmlxGrid/codebase/imgs')?>");
 mygrid.setSkin("dhx_skyblue");
-mygrid.setHeader("Frame Id,Frame Serial No,Material,Type,Supplier,Price,Qty,Added Date,Action");
-mygrid.setColSorting("int,str,str,str,str,int,int,str");
-mygrid.setInitWidths("70,100,100,100,200,100,80,80,80,250");
-mygrid.setColAlign("right,right,right,right,right,right,right,right,right,center");
-mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
-mygrid.attachHeader("#text_filter,#text_filter,#rspan,#rspan,#select_filter,#rspan,#rspan,#rspan,#rspan");
+mygrid.setHeader("Lens Id,Categor,Color,Power,Price,Qty,Supplier,Details,Bill No,Added Date,Action");
+mygrid.setColSorting("int,str,str,str,int,int,str,str,str,str,center");
+mygrid.setInitWidths("70,200,100,100,200,100,100,100,80,80,80");
+mygrid.setColAlign("right,left,left,right,right,right,right,right,left,left,center");
+mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
+mygrid.attachHeader("#text_filter,#text_filter,#rspan,#rspan,#rspan,#rspan,#select_filter,#rspan,#rspan,#rspan,#rspan");
 mygrid.init();
-
-mygrid.load("<?php echo site_url("/frames/produce_grid_feed/1000/0")?>");
-//<div  style="width:400px; height:270px; background-color:white;"></div>
-
+mygrid.load("<?php echo site_url("/lenses/produce_grid_feed/1000/0")?>");
 
 function edit_record(id){
 	
