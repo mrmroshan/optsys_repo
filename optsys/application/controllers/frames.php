@@ -98,30 +98,37 @@ class Frames extends CI_Controller {
 		$form_data['gen_message'] = null;
 		$form_data['form_data_val'] = null;		
 		$post = $this->input->post(null);
+		$form_data['fields'] = $post;
+		//suplist
+		$record_set = $this->suppliers_model->select_records('*',200,null,null);
+		$form_data['suplist'] = $record_set['result_set'];
+		
+		if(isset($post['btnSave'])){
 	
-		if(isset($post['btnSubmit'])){
-	
-			$form_data['form_data_val'] = $post;
+			$form_data['fields'] = $post;
 			$validation = $this->validate_form(true);
 				
 			if($validation){
 					
 				//remove submit button from the array
 				foreach($post as $k => $v){
-					if($k == 'btnSubmit')unset($post[$k]);
+					if($k == 'btnSave')unset($post[$k]);
 				}
-				$post['company_id'] =  $this->session->userdata('company_id');
-				//if form data is valid
-				$save_data =$post;
 	
-				$result = $this->frames_model->update_record($save_data,array('dep_id'=>$id));
+				//if form data is valid
+				$save_data['updated_date'] = date('Y-m-d');
+				$save_data['updated_by'] = '1';
+				$save_data =$post;
+				
+	
+				$result = $this->frames_model->update_record($save_data,array('frame_id'=>$id));
 	
 				if($result>0){
 					$form_data['gen_message'] = array(
 							'type' => 'success',
 							'text' => 'Data updated!');
 	
-					$this->redirect_home(site_url('departments/dashboard'));
+					//$this->redirect_home(site_url('formshome'));
 	
 				}else{
 					$form_data['gen_message'] = array(
@@ -134,9 +141,9 @@ class Frames extends CI_Controller {
 		}//end if submit check
 	
 		//get record data
-		$record_set = $this->frames_model->select_records('*',null,null,array('dep_id'=>$id));
-		$form_data['form_data_val'] = $record_set['result_set'][0];
-		$this->load->view('departments/edit',$form_data);
+		$record_set = $this->frames_model->select_records('*',null,null,array('frame_id'=>$id));
+		$form_data['fields'] = $record_set['result_set'][0];
+		$this->load->view('edit_frame',$form_data);
 			
 	}//end of function
 	
@@ -256,13 +263,7 @@ class Frames extends CI_Controller {
 	
 		$data = array('frame_id' => $id);
 		$status = $this->frames_model->delete($data);
-	
-		if($status == 1){	
-			$form_data['gen_message'] = array(
-					'type' => 'success',
-					'text' => 'Record has been deleted');
-			$this->load->view('frameshome',$form_data);			
-		}
+		echo $status;	
 	
 	}//end of delete
 	

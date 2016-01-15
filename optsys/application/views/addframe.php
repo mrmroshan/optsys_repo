@@ -1,5 +1,5 @@
 <?php include 'html_head.php';?>  
-
+<?php include 'navigation.php';?>
 <div class="container">
 	<div class="row">
 	<div class="col-sm-12 col-md-2"></div>
@@ -40,25 +40,7 @@
 	    <div class="col-md-4">
 	    <input type="text" class="form-control " id="frame_serial_no" name="frame_serial_no" placeholder="Serial No" value="<?php echo $fields['frame_serial_no']?>">
 	    </div>
-	  </div>	
-	
-	  <!-- <div class="form-group ">
-	    <label for="frame_material">Frame Material</label>	    
-	    <?php 
-	    $other = ' class="form-control" id="frame_material" ';
-	    $options = array('4'  => 'Staff','3'=> 'Manager');
-		echo form_dropdown('frame_material', $options,$fields['frame_material'],$other);
-		?>
-	  </div>-->
-	  
-	 <!-- <div class="form-group">
-	    <label for="frame_type">Frame Type</label>	    
-	    <?php 
-	    $other = ' class="form-control " id="frame_type"';
-	    $options = array('4'  => 'Staff','3'=> 'Manager');
-		echo form_dropdown('frame_type', $options,$fields['frame_type'],$other);
-		?>
-	  </div>-->
+	  </div> 
 	
 	 <!-- <div class="form-group">
 	    <label for="frame_brand">Frame Brand</label>	    
@@ -85,19 +67,43 @@
 		</div>
 	  </div>
 	  
-	  <div class="form-group">
+	  <!-- <div class="form-group">
 	    <label for="frame_type" class="col-md-3 control-label">Frame Type</label>
 	    <div class="col-md-4">	    
 	    <input type="text" class="form-control " id="frame_type" name="frame_type" placeholder="Frame Type" value="<?php echo $fields['frame_type']?>" >
 	  	</div>
+	  </div>-->
+	  
+	  <div class="form-group ">
+	    <label for="frame_material" class="col-md-3 control-label">Frame Material</label>
+	    <div class="col-md-4">	    
+	    <?php 
+	    $other = ' class="form-control" id="frame_material" ';
+		$options = array('Monel Metal'  => 'Monel Metal','Titanium and Stainless Steel'=> 'Titanium and Stainless Steel','Memory Metal'=>'Memory Metal','Plastic'=>'Plastic','Carbon Fibre'=>'Carbon Fibre');
+		echo form_dropdown('frame_material', $options,$fields['frame_material'],$other);
+		?>
+		</div>
+	  </div>
+	  
+	  
+	  <div class="form-group">
+	    <label for="frame_type" class="col-md-3 control-label">Frame Type</label>
+	    <div class="col-md-4">	    	    
+	    <?php 
+	    $other = ' class="form-control " id="frame_type"';
+	    $options = array('Full Rim Frames'  => 'Full Rim Frames','Rimless Frames'=> 'Rimless Frames','Semi-Rimless Frames'=>'Semi-Rimless Frames','Half-Eye Frames'=>'Half-Eye Frames');
+		echo form_dropdown('frame_type', $options,$fields['frame_type'],$other);
+		?>
+		</div>
 	  </div>
 
+	  <!-- 
 	  <div class="form-group">
 	    <label for="frame_material" class="col-md-3 control-label">Frame Material</label>
 	    <div class="col-md-4">	    
 	    <input type="text" class="form-control " id="frame_material" name="frame_material" placeholder="Frame Material" value="<?php echo $fields['frame_material']?>" >
 	  	</div>
-	  </div>
+	  </div>-->
 	  
 	  
 	  <div class="form-group">
@@ -151,7 +157,7 @@
 	  
 	  
 	  <div class="form-group">
-	    <label for="details" class="col-md-3 control-label">Description</label>
+	    <label for="details" class="col-md-3 control -label">Description</label>
 	    <div class="col-md-6">
 	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
 	    </div>
