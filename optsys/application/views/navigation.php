@@ -14,9 +14,11 @@
           <ul class="nav navbar-nav">
             <li <?php echo ($controller =='')?'class="active"':null;?>><a href="<?php echo base_url()?>">Home</a></li>
             <li> <a href="#about">prescriptions</a> </li>
-            <li><a href="#about">Patients</a></li>
+            <li <?php echo ($controller =='patients')?' class="active" ':null;?>>
+            <a href="<?php echo site_url('patients/index');?>">Patients</a>
+            </li>
             <li <?php echo ($controller =='frames')?' class="active" ':null;?> >
-            <a href="<?php echo base_url('index.php/frames/index');?>">Frames</span></a>
+            <a href="<?php echo site_url('frames/index');?>">Frames</span></a>
             </li>
             <li <?php echo ($controller =='lenses')?'class="active"':null;?>>
             <a href="<?php echo site_url('lenses/index')?>" >Lenses</a>

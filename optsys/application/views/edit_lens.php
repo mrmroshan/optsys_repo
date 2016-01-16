@@ -117,14 +117,14 @@
 	  <div class="form-group">
 	    <label for="price" class="col-md-6 control-label">Price</label>
 	    <div class="col-md-6">	    
-	    <input type="text" class="form-control " id="price" name="price" placeholder="Price" value="<?php echo $fields['price']?>" >
+	    <input type="text" class="form-control " id="price" name="price" placeholder="Price" value="<?php echo number_format($fields['price'],2,'.','');?>" >
 	  	</div>
 	  </div>
 	  
 	  <div class="form-group">
 	    <label for="cost" class="col-md-6 control-label">Cost</label>
 	    <div class="col-md-6">	    
-	    <input type="text" class="form-control " id="cost" name="cost" placeholder="Cost" value="<?php echo $fields['cost']?>" >
+	    <input type="text" class="form-control " id="cost" name="cost" placeholder="Cost" value="<?php echo number_format($fields['cost'],2,'.','');?>" >
 	  	</div>
 	  </div>
 	  
