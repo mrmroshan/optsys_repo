@@ -1,14 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Lenses extends CI_Controller {
+class Suppliers extends CI_Controller {
 	
 	function __construct(){
 	
 		parent::__construct();	
-		$this->load->model('lenses_model');
-		$this->load->model('suppliers_model');
-		$this->load->model('lenses_model');
-		$this->load->model('category_model');
+		$this->load->model('suppliers_model');		
+
 	}//end of function
 
 	/**
@@ -18,7 +16,7 @@ class Lenses extends CI_Controller {
 	public function index()
 	{
 		$this->output->enable_profiler(false);
-		$this->load->view('lenses_home');
+		$this->load->view('supplier_home');
 	}
 	
 
@@ -31,15 +29,11 @@ class Lenses extends CI_Controller {
 		$form_data['fields'] = $post;
 		
 		//suplist
-		$record_set = $this->suppliers_model->select_records('*',1000,null,null);
+		$record_set = $this->suppliers_model->select_records('*',200,null,null);
 		$form_data['suplist'] = $record_set['result_set'];
-		
-		//cat
-		$cat_record_set = $this->category_model->select_records('*',1000,null,null);
-		$form_data['catlist'] = $cat_record_set['result_set'];
 				
 		if(isset($post['btnSave'])){
-				
+			
 			$validation = $this->validate_form();
 			
 			if($validation){
@@ -52,15 +46,15 @@ class Lenses extends CI_Controller {
 				$post['added_date'] = date('Y-m-d');
 				$post['added_by'] = '1';
 					
-				if(!$this->lenses_model->is_exist($save_data)){
+				if(!$this->suppliers_model->is_exist($save_data)){
 						
-					$result = $this->lenses_model->save($post);
+					$result = $this->suppliers_model->save($post);
 						
 					if($result>0){
 						$form_data['gen_message'] = array(
 								'type' => 'success',
 								'text' => 'Data saved!');
-						$this->redirect_home(site_url('lenses/index'));
+						$this->redirect_home(site_url('frames/index'));
 					}else{
 	
 						$form_data['gen_message'] = array(
@@ -85,7 +79,7 @@ class Lenses extends CI_Controller {
 	
 		}//end if submit check
 	
-		$this->load->view('add_lense',$form_data);
+		$this->load->view('add_supplier',$form_data);
 	
 	
 	}//end of function
@@ -104,15 +98,9 @@ class Lenses extends CI_Controller {
 		$form_data['form_data_val'] = null;		
 		$post = $this->input->post(null);
 		$form_data['fields'] = $post;
-		
 		//suplist
 		$record_set = $this->suppliers_model->select_records('*',200,null,null);
 		$form_data['suplist'] = $record_set['result_set'];
-		
-		//cat
-		$cat_record_set = $this->category_model->select_records('*',1000,null,null);
-		$form_data['catlist'] = $cat_record_set['result_set'];
-		
 		
 		if(isset($post['btnSave'])){
 	
@@ -132,14 +120,14 @@ class Lenses extends CI_Controller {
 				$save_data =$post;
 				
 	
-				$result = $this->lenses_model->update_record($save_data,array('lens_id'=>$id));
+				$result = $this->suppliers_model->update_record($save_data,array('sup_id'=>$id));
 	
 				if($result>0){
 					$form_data['gen_message'] = array(
 							'type' => 'success',
 							'text' => 'Data updated!');
 	
-					$this->redirect_home(site_url('lenses/index'));
+					//$this->redirect_home(site_url('formshome'));
 	
 				}else{
 					$form_data['gen_message'] = array(
@@ -152,9 +140,9 @@ class Lenses extends CI_Controller {
 		}//end if submit check
 	
 		//get record data
-		$record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$id));
+		$record_set = $this->suppliers_model->select_records('*',null,null,array('sup_id'=>$id));
 		$form_data['fields'] = $record_set['result_set'][0];
-		$this->load->view('edit_lens',$form_data);
+		$this->load->view('edit_frame',$form_data);
 			
 	}//end of function
 	
@@ -163,17 +151,26 @@ class Lenses extends CI_Controller {
 	
 	
 	
-	private function validate_form($edit = false){	
-		
+	private function validate_form($edit = false){
+	
 		//do validation here
-		$this->form_validation->set_rules('sup_id', 'Supplier', 'required');
-		$this->form_validation->set_rules('cat_id', 'Category', 'required');
-		$this->form_validation->set_rules('lens_power', 'Lense Power', 'required');
-		$this->form_validation->set_rules('lens_color', 'Lens Color', 'required');
-		$this->form_validation->set_rules('qty', 'Qty', 'required|integer');		
-		$this->form_validation->set_rules('price', 'Lens Price', 'required|decimal');
-		$this->form_validation->set_rules('cost', 'Lens Cost', 'required|decimal');		
-		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'required|integer');		
+		$this->form_validation->set_rules('frame_serial_no', 'Frame Serial No', 'required');
+		$this->form_validation->set_rules('frame_material', 'Frame Material', 'required');
+		$this->form_validation->set_rules('frame_type', 'Frame Type', 'required');
+		$this->form_validation->set_rules('frame_brand', 'Frame Brand', 'required');
+		$this->form_validation->set_rules('sup_id', 'Supplier Name', 'required');
+		$this->form_validation->set_rules('frame_color', 'Frame Color', 'required');
+		$this->form_validation->set_rules('frame_size', 'Frame Size', 'required');
+		$this->form_validation->set_rules('price', 'Frame Price', 'required');
+		$this->form_validation->set_rules('cost', 'Frame Cost', 'required');
+		$this->form_validation->set_rules('qty', 'Frame qty', 'required');
+		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'required');
+		$this->form_validation->set_rules('details', 'Description', 'required');
+		$this->form_validation->set_rules('qty', 'Frame qty', 'integer');
+		$this->form_validation->set_rules('price', 'Frame Price', 'decimal');
+		$this->form_validation->set_rules('cost', 'Frame Cost', 'decimal');
+		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'integer');
+		$this->form_validation->set_rules('frame_size', 'Frame Size', 'integer');
 		
 		if($edit == false){
 				
@@ -211,7 +208,7 @@ class Lenses extends CI_Controller {
 	public function produce_grid_feed($limit=25,$offset=0){
 	
 	
-		$record_set = $this->lenses_model->select_records('*',$limit,$offset);
+		$record_set = $this->suppliers_model->select_records('*',$limit,$offset);
 	
 		// init xml writer
 		$xml = new Xml_writer();
@@ -220,28 +217,18 @@ class Lenses extends CI_Controller {
 		$xml->initiate();
 	
 		foreach($record_set['result_set'] as $record ){
-
-			//"Lens Id,Categor,Color,Power,Price,Qty,Supplier,Details,Bill No,Added Date,Added by"
-			$xml->startBranch('row',array('id' =>$record['lens_id']));
-			$action = '<a href="'.site_url('lenses/edit/'.$record['lens_id'].'').'" onclick="">Edit</a>  |
-					   <a href="javascript:void(0);" onclick="delete_record('.$record['lens_id'].')">Delete</a> ';
-			$xml->addNode('cell',$action,null, true);
-			$xml->addNode('cell',$record['lens_id'],null, true);
-			$cat_record_set = $this->category_model->select_records('*',1,0,array('cat_id' => $record['cat_id']));
-			$cat = (empty($cat_record_set['result_set']))?'-':$cat_record_set['result_set'][0]['category'];
-			$xml->addNode('cell',$cat,null, true);
- 			$xml->addNode('cell',$record['lens_color'],null, true);
- 			$xml->addNode('cell',$record['lens_power'],null, true);
- 			$price = 'Rs.'.number_format($record['price'], 2, '.', ',');
- 			$xml->addNode('cell',$price,null, true);
- 			$xml->addNode('cell',$record['qty'],null, true); 			
- 			$sup_record_set = $this->suppliers_model->select_records('*',1,0,array('sup_id' => $record['sup_id']));
- 			$sup_name = (empty($sup_record_set['result_set']))?'-':$sup_record_set['result_set'][0]['company_name'];
- 			$xml->addNode('cell',$sup_name ,null, true); 			
- 			$xml->addNode('cell',$record['details'],null, true);
- 			$xml->addNode('cell',$record['bill_no'],null, true);
- 			$xml->addNode('cell',$record['added_date'],null, true); 			
-
+			
+			$xml->startBranch('row',array('id' =>$record['sup_id']));
+			$action = '<a href="javascript:void(0);" onclick="edit_record('.$record['sup_id'].')">Edit</a>  |  
+					   <a href="javascript:void(0);" onclick="delete_record('.$record['sup_id'].')">Delete</a> ';
+			$xml->addNode('cell',$action,null, true);					
+			$xml->addNode('cell',$record['sup_id'],null, true);
+			$xml->addNode('cell',$record['company_name'],null, true);
+			$xml->addNode('cell',$record['contact_person'],null, true);
+			$xml->addNode('cell',$record['phone_no'],null, true);
+			$xml->addNode('cell',$record['mobile_no'],null, true);
+			$xml->addNode('cell',$record['address'],null, true);	
+			$xml->addNode('cell',$record['added_date'],null, true);
 			$xml->endBranch();	
 		}
 	
@@ -268,11 +255,11 @@ class Lenses extends CI_Controller {
 	 */
 	public function delete($id=null){
 	
-		$record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$id));
+		$record_set = $this->suppliers_model->select_records('*',null,null,array('sup_id'=>$id));
 		$form_data['form_data_val'] = $record_set['result_set'][0];
 	
-		$data = array('lens_id' => $id);
-		$status = $this->lenses_model->delete($data);
+		$data = array('sup_id' => $id);
+		$status = $this->suppliers_model->delete($data);
 		echo $status;	
 	
 	}//end of delete
@@ -290,7 +277,7 @@ class Lenses extends CI_Controller {
 		$optionsOnly = isset($myParams['optionsonly'])? $myParams['optionsonly']:false;
 		$optionsOnly = ($optionsOnly == 'true')? true:false;
 	
-		$dataset = $this->lenses_model->select_records();
+		$dataset = $this->suppliers_model->select_records();
 			
 		$wrapped_data['data'] = $dataset['result_set'];
 		$wrapped_data['selectByValue'] = $selectByValue;

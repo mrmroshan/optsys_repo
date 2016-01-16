@@ -17,16 +17,13 @@
             <li><a href="#about">Patients</a></li>
             <li <?php echo ($controller =='frames')?' class="active" ':null;?> >
             <a href="<?php echo base_url('index.php/frames/index');?>">Frames</span></a>
-              <!-- 	
-              <span class="caret">
-               class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-	          <ul class="dropdown-menu">
-	            <li><a href="<?php echo base_url('index.php/frames/index');?>">List All Frames</a></li>
-	            <li><a href="<?php echo base_url('index.php/frames/add');?>">Add New Frame</a></li>	            
-	          </ul>
-	          -->
             </li>
-            <li><a href="<?php echo site_url('lenses/index')?>" <?php echo ($controller =='')?'class="active"':null;?>>Lenses</a></li>
+            <li <?php echo ($controller =='lenses')?'class="active"':null;?>>
+            <a href="<?php echo site_url('lenses/index')?>" >Lenses</a>
+            </li>
+            <li <?php echo ($controller =='suppliers')?'class="active"':null;?>>
+            <a href="<?php echo site_url('suppliers/index')?>" >Suppliers</a>
+            </li>
             <li><a href="#contact">Reports</a></li>
           </ul>
         </div><!--/.nav-collapse -->

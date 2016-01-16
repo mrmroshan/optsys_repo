@@ -36,7 +36,7 @@
 
 	<div class="row ">	
 	<dir class="col-sm-12 col-md-8">
-	<h1>Lenses Stock</h1>
+	<h1>Product Suppliers</h1>
 	</dir>
 	<dir class="col-sm-12 col-md-4 text-right">	
 	<a class="btn btn-primary" href="<?php echo site_url('/lenses/add')?>" role="button">Add New</a>
@@ -57,34 +57,35 @@
 mygrid = new dhtmlXGridObject('gridbox');
 mygrid.setImagePath("<?php echo base_url('dhtmlx/dhtmlxGrid/codebase/imgs')?>");
 mygrid.setSkin("dhx_skyblue");
-mygrid.setHeader    ("Action ,Lens Id,Categor,Color,Power,Price,Qty  ,Supplier,Details,Bill No,Added Date");
-mygrid.setColSorting("int    ,str    ,str    ,str  ,price,int  ,str  ,str     ,str    ,str    ,center");
-mygrid.setInitWidths("80     ,50     ,200    ,100  ,80   ,80  ,40   ,100     ,200    ,80     ,80");
-mygrid.setColAlign("center   ,right  ,left   ,left ,right,right,right,right   ,left  ,left   ,left");
-mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
-mygrid.attachHeader("#rspan  ,#text_filter,#text_filter,#rspan,#rspan,#rspan,#rspan,#select_filter,#rspan,#text_filter,#rspan");
+mygrid.setHeader    ("Action ,Supplier Id,Company Name,Contact Person,Phone No,Mobile No,Address  ,Added Date");
+mygrid.setColSorting("str    ,int        ,str         ,str           ,str     ,str      ,str      ,str     ");
+mygrid.setInitWidths("80     ,50         ,200         ,100           ,80      ,80       ,200      ,80  ");
+mygrid.setColAlign("center   ,right      ,left        ,left          ,left    ,left     ,left     ,left ");
+mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro");
+mygrid.attachHeader("#rspan,#text_filter,#text_filter,#text_filter,#text_filter,#text_filter,#rspan,#rspan");
 mygrid.init();
-mygrid.load("<?php echo site_url("/lenses/produce_grid_feed/1000/0")?>");
+mygrid.load("<?php echo site_url("/suppliers/produce_grid_feed/1000/0")?>");
 
 function edit_record(id){
 	
-	//$('#edit_form').attr('src','<?php echo site_url("/frames/edit")?>/'+id);
-	//$('#del_conf').modal({
-		//'backdrop':false		
-	//});
+	$('#edit_form').attr('src','<?php echo site_url("/frames/edit")?>/'+id);
+	$('#del_conf').modal({
+		'backdrop':false		
+	});
+
 }
 function delete_record(id){
 	var conf = confirm('Are you sure? Do you want to delete this record?');
 	if(conf){		
         $.ajax({
-            url: "<?php echo site_url('lenses/delete');?>/"+id,
+            url: "<?php echo site_url('frames/delete');?>/"+id,
             type: "get",               
             success: function(data, status){
                 	if(data == 1){               
                 	 	show_alert('success','Record deleted sucessfully');
-                		mygrid.clearAndLoad("<?php echo site_url("/lenses/produce_grid_feed/1000/0")?>");           
+                		mygrid.clearAndLoad("<?php echo site_url("/frames/produce_grid_feed/1000/0")?>");           
                     }else{
-                     	show_alert('error','Record could not delete');
+                     	show_alert('error','Record could not delet');
                     }
             }
         });//end of ajax
@@ -94,7 +95,7 @@ function delete_record(id){
 }
 
 function refresh_grid(){
-	mygrid.clearAndLoad("<?php echo site_url("/frames/produce_grid_feed/1000/0")?>");	
+	mygrid.clearAndLoad("<?php echo site_url("/suppliers/produce_grid_feed/1000/0")?>");	
 }
 
 function show_alert(type,text){
