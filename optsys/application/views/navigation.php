@@ -24,6 +24,9 @@
             <li <?php echo ($controller =='suppliers')?'class="active"':null;?>>
             <a href="<?php echo site_url('suppliers/index')?>" >Suppliers</a>
             </li>
+            <li <?php echo ($controller =='categories')?'class="active"':null;?>>
+            <a href="<?php echo site_url('categories/index')?>" >Categories</a>
+            </li>
             <li><a href="#contact">Reports</a></li>
           </ul>
         </div><!--/.nav-collapse -->
