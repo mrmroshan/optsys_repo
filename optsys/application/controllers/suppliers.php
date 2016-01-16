@@ -26,11 +26,7 @@ class Suppliers extends CI_Controller {
 		$form_data = array();
 		$form_data['gen_message'] = null;		
 		$post = $this->input->post(null);
-		$form_data['fields'] = $post;
-		
-		//suplist
-		$record_set = $this->suppliers_model->select_records('*',200,null,null);
-		$form_data['suplist'] = $record_set['result_set'];
+		$form_data['fields'] = $post;		
 				
 		if(isset($post['btnSave'])){
 			
@@ -54,7 +50,7 @@ class Suppliers extends CI_Controller {
 						$form_data['gen_message'] = array(
 								'type' => 'success',
 								'text' => 'Data saved!');
-						$this->redirect_home(site_url('frames/index'));
+						$this->redirect_home(site_url('suppliers/index'));
 					}else{
 	
 						$form_data['gen_message'] = array(
@@ -98,9 +94,6 @@ class Suppliers extends CI_Controller {
 		$form_data['form_data_val'] = null;		
 		$post = $this->input->post(null);
 		$form_data['fields'] = $post;
-		//suplist
-		$record_set = $this->suppliers_model->select_records('*',200,null,null);
-		$form_data['suplist'] = $record_set['result_set'];
 		
 		if(isset($post['btnSave'])){
 	
@@ -127,7 +120,7 @@ class Suppliers extends CI_Controller {
 							'type' => 'success',
 							'text' => 'Data updated!');
 	
-					//$this->redirect_home(site_url('formshome'));
+					$this->redirect_home(site_url('suppliers/index'));
 	
 				}else{
 					$form_data['gen_message'] = array(
@@ -142,7 +135,7 @@ class Suppliers extends CI_Controller {
 		//get record data
 		$record_set = $this->suppliers_model->select_records('*',null,null,array('sup_id'=>$id));
 		$form_data['fields'] = $record_set['result_set'][0];
-		$this->load->view('edit_frame',$form_data);
+		$this->load->view('edit_supplier',$form_data);
 			
 	}//end of function
 	
@@ -154,23 +147,10 @@ class Suppliers extends CI_Controller {
 	private function validate_form($edit = false){
 	
 		//do validation here
-		$this->form_validation->set_rules('frame_serial_no', 'Frame Serial No', 'required');
-		$this->form_validation->set_rules('frame_material', 'Frame Material', 'required');
-		$this->form_validation->set_rules('frame_type', 'Frame Type', 'required');
-		$this->form_validation->set_rules('frame_brand', 'Frame Brand', 'required');
-		$this->form_validation->set_rules('sup_id', 'Supplier Name', 'required');
-		$this->form_validation->set_rules('frame_color', 'Frame Color', 'required');
-		$this->form_validation->set_rules('frame_size', 'Frame Size', 'required');
-		$this->form_validation->set_rules('price', 'Frame Price', 'required');
-		$this->form_validation->set_rules('cost', 'Frame Cost', 'required');
-		$this->form_validation->set_rules('qty', 'Frame qty', 'required');
-		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'required');
-		$this->form_validation->set_rules('details', 'Description', 'required');
-		$this->form_validation->set_rules('qty', 'Frame qty', 'integer');
-		$this->form_validation->set_rules('price', 'Frame Price', 'decimal');
-		$this->form_validation->set_rules('cost', 'Frame Cost', 'decimal');
-		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'integer');
-		$this->form_validation->set_rules('frame_size', 'Frame Size', 'integer');
+		$this->form_validation->set_rules('company_name', 'Company Name', 'required');
+		$this->form_validation->set_rules('contact_person', 'Contact Person', 'required');
+		$this->form_validation->set_rules('phone_no', 'Phone No', 'required');
+		$this->form_validation->set_rules('address', 'Address', 'required');
 		
 		if($edit == false){
 				
@@ -219,7 +199,7 @@ class Suppliers extends CI_Controller {
 		foreach($record_set['result_set'] as $record ){
 			
 			$xml->startBranch('row',array('id' =>$record['sup_id']));
-			$action = '<a href="javascript:void(0);" onclick="edit_record('.$record['sup_id'].')">Edit</a>  |  
+			$action = '<a href="'.site_url('suppliers/edit/'.$record['sup_id']).'" onclick="">Edit</a>  |  
 					   <a href="javascript:void(0);" onclick="delete_record('.$record['sup_id'].')">Delete</a> ';
 			$xml->addNode('cell',$action,null, true);					
 			$xml->addNode('cell',$record['sup_id'],null, true);

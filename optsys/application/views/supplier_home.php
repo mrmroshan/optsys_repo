@@ -36,10 +36,10 @@
 
 	<div class="row ">	
 	<dir class="col-sm-12 col-md-8">
-	<h1>Product Suppliers</h1>
+	<h1>Suppliers List</h1>
 	</dir>
 	<dir class="col-sm-12 col-md-4 text-right">	
-	<a class="btn btn-primary" href="<?php echo site_url('/lenses/add')?>" role="button">Add New</a>
+	<a class="btn btn-primary" href="<?php echo site_url('/suppliers/add')?>" role="button">Add New</a>
 	</dir>
 	
 	<div class="col-sm-12 col-md-12 " >
@@ -78,14 +78,14 @@ function delete_record(id){
 	var conf = confirm('Are you sure? Do you want to delete this record?');
 	if(conf){		
         $.ajax({
-            url: "<?php echo site_url('frames/delete');?>/"+id,
+            url: "<?php echo site_url('suppliers/delete');?>/"+id,
             type: "get",               
             success: function(data, status){
                 	if(data == 1){               
                 	 	show_alert('success','Record deleted sucessfully');
-                		mygrid.clearAndLoad("<?php echo site_url("/frames/produce_grid_feed/1000/0")?>");           
+                		mygrid.clearAndLoad("<?php echo site_url("/suppliers/produce_grid_feed/1000/0")?>");           
                     }else{
-                     	show_alert('error','Record could not delet');
+                     	show_alert('error','Record could not delete');
                     }
             }
         });//end of ajax

@@ -36,7 +36,7 @@
 
 	<div class="row ">	
 	<dir class="col-sm-12 col-md-8">
-	<h1>Lenses Stock</h1>
+	<h1>Lens Stock</h1>
 	</dir>
 	<dir class="col-sm-12 col-md-4 text-right">	
 	<a class="btn btn-primary" href="<?php echo site_url('/lenses/add')?>" role="button">Add New</a>
