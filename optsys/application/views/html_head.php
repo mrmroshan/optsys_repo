@@ -7,9 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Dilani Vision</title>
+    
     <!-- Bootstrap -->
     <link href="<?php echo base_url('/css/bootstrap.min.css')?>" rel="stylesheet">
+    <link href="<?php echo base_url('/css/bootstrap-select.min.css')?>" rel="stylesheet">
     <link href="<?php echo base_url('/css/custom_css.css');?>" rel="stylesheet">
+    <link href="<?php echo base_url('/css/datepicker.css');?>" rel="stylesheet"><!-- http://www.eyecon.ro/bootstrap-datepicker -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,6 +31,13 @@
     <script type="text/javascript" src="<?php echo base_url('/dhtmlx/dhtmlxGrid/codebase/ext/dhtmlxgrid_srnd.js')?>"></script>
     <script type="text/javascript" src="<?php echo base_url('/dhtmlx/dhtmlxGrid/codebase/ext/dhtmlxgrid_filter.js')?>"></script>
     <script type="text/javascript" src="<?php echo base_url('/dhtmlx/dhtmlxGrid/codebase/ext/dhtmlxgrid_start.js')?>"></script>
-        
+
+    <!-- For Calendar -->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('dhtmlx/dhtmlxCalendar/codebase/dhtmlxcalendar.css')?>"></link>
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url('dhtmlx/dhtmlxCalendar/codebase/skins/dhtmlxcalendar_dhx_skyblue.css')?>"></link>
+	<script src="<?php echo base_url('dhtmlx/dhtmlxCalendar/codebase/dhtmlxcalendar.js')?>"></script>
+    
+    
+    
     </head>
   <body>

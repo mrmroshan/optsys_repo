@@ -12,8 +12,10 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li <?php echo ($controller =='')?'class="active"':null;?>><a href="<?php echo base_url()?>">Home</a></li>
-            <li> <a href="#about">prescriptions</a> </li>
+            <li <?php echo ($controller =='')?'class="active"':null;?>><a href="<?php echo base_url()?>">Home</a></li>                       
+            <li <?php echo ($controller =='prescriptions')?' class="active" ':null;?>>
+            <a href="<?php echo site_url('prescriptions/index');?>">Prescriptions</a>            
+            </li>
             <li <?php echo ($controller =='patients')?' class="active" ':null;?>>
             <a href="<?php echo site_url('patients/index');?>">Patients</a>
             </li>

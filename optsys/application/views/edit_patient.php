@@ -8,7 +8,7 @@
 	
 	<div class="col-sm-12 col-md-6 col-md-offset-2">
 	
-	<h1>Add New Patient</h1>	
+	<h1>Edit Patient Details</h1>	
 	
 		  <?php 
 		  $msg = validation_errors();
@@ -122,7 +122,7 @@
 	  <div class="form-group">
 	     <label for="" class="col-md-6 control-label"></label>
 	    <div class="col-md-6">
-	     <button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Save</button>	     
+	     <button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Update</button>	     
 	     <a class="btn btn-primary btn-md btn-large" href="<?php echo site_url('patients/index')?>" role="button">Cancel</a>
 	     </div>
 	    </div>	

@@ -1,11 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Patients extends CI_Controller {
+class Prescriptions extends CI_Controller {
 	
 	function __construct(){
 	
 		parent::__construct();	
-		$this->load->model('patients_model');
+		$this->load->model('prescriptions_model');
+		$this->load->model('suppliers_model');
+		$this->load->model('prescriptions_model');
+		$this->load->model('category_model');
+		$this->load->model('patients_model');		
 	}//end of function
 
 	/**
@@ -15,7 +19,7 @@ class Patients extends CI_Controller {
 	public function index()
 	{
 		$this->output->enable_profiler(false);
-		$this->load->view('patients_home');
+		$this->load->view('prescriptions_home');
 	}
 	
 
@@ -26,8 +30,11 @@ class Patients extends CI_Controller {
 		$form_data['gen_message'] = null;		
 		$post = $this->input->post(null);
 		$form_data['fields'] = $post;
-	
-				
+		
+		//patients
+		$record_set = $this->patients_model->select_records('p_id,title,full_name',1000,null,null);
+		$form_data['patlist'] = $record_set['result_set'];
+						
 		if(isset($post['btnSave'])){
 				
 			$validation = $this->validate_form();
@@ -42,15 +49,15 @@ class Patients extends CI_Controller {
 				$post['added_date'] = date('Y-m-d');
 				$post['added_by'] = '1';
 					
-				if(!$this->patients_model->is_exist($save_data)){
+				if(!$this->prescriptions_model->is_exist($save_data)){
 						
-					$result = $this->patients_model->save($post);
+					$result = $this->prescriptions_model->save($post);
 						
 					if($result>0){
 						$form_data['gen_message'] = array(
 								'type' => 'success',
 								'text' => 'Data saved!');
-						$this->redirect_home(site_url('patients/index'));
+						$this->redirect_home(site_url('lenses/index'));
 					}else{
 	
 						$form_data['gen_message'] = array(
@@ -75,7 +82,7 @@ class Patients extends CI_Controller {
 	
 		}//end if submit check
 	
-		$this->load->view('add_patient',$form_data);
+		$this->load->view('add_prescription',$form_data);
 	
 	
 	}//end of function
@@ -95,7 +102,15 @@ class Patients extends CI_Controller {
 		$post = $this->input->post(null);
 		$form_data['fields'] = $post;
 		
-	
+		//suplist
+		$record_set = $this->suppliers_model->select_records('*',200,null,null);
+		$form_data['suplist'] = $record_set['result_set'];
+		
+		//cat
+		$cat_record_set = $this->category_model->select_records('*',1000,null,null);
+		$form_data['catlist'] = $cat_record_set['result_set'];
+		
+		
 		if(isset($post['btnSave'])){
 	
 			$form_data['fields'] = $post;
@@ -114,14 +129,14 @@ class Patients extends CI_Controller {
 				$save_data =$post;
 				
 	
-				$result = $this->patients_model->update_record($save_data,array('p_id'=>$id));
+				$result = $this->prescriptions_model->update_record($save_data,array('pre_id'=>$id));
 	
 				if($result>0){
 					$form_data['gen_message'] = array(
 							'type' => 'success',
 							'text' => 'Data updated!');
 	
-					$this->redirect_home(site_url('patients/index'));
+					$this->redirect_home(site_url('lenses/index'));
 	
 				}else{
 					$form_data['gen_message'] = array(
@@ -134,9 +149,9 @@ class Patients extends CI_Controller {
 		}//end if submit check
 	
 		//get record data
-		$record_set = $this->patients_model->select_records('*',null,null,array('p_id'=>$id));
+		$record_set = $this->prescriptions_model->select_records('*',null,null,array('pre_id'=>$id));
 		$form_data['fields'] = $record_set['result_set'][0];
-		$this->load->view('edit_patient',$form_data);
+		$this->load->view('edit_lens',$form_data);
 			
 	}//end of function
 	
@@ -148,14 +163,14 @@ class Patients extends CI_Controller {
 	private function validate_form($edit = false){	
 		
 		//do validation here
-		$this->form_validation->set_rules('full_name', 'Full Name', 'required');
-		$this->form_validation->set_rules('nic_no', 'NIC No', 'required');
-		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-		$this->form_validation->set_rules('address', 'Address', 'required');
-		$this->form_validation->set_rules('home_tp_no', 'Land Line', 'required');		
-		$this->form_validation->set_rules('mobile_no', 'Mobile No', 'required');
-		$this->form_validation->set_rules('dob', 'Date of birth', 'date');		
-				
+		$this->form_validation->set_rules('sup_id', 'Supplier', 'required');
+		$this->form_validation->set_rules('cat_id', 'Category', 'required');
+		$this->form_validation->set_rules('lens_power', 'Lense Power', 'required');
+		$this->form_validation->set_rules('lens_color', 'Lens Color', 'required');
+		$this->form_validation->set_rules('qty', 'Qty', 'required|integer');		
+		$this->form_validation->set_rules('price', 'Lens Price', 'required|decimal');
+		$this->form_validation->set_rules('cost', 'Lens Cost', 'required|decimal');		
+		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'required|integer');		
 		
 		if($edit == false){
 				
@@ -165,7 +180,25 @@ class Patients extends CI_Controller {
 		return $this->form_validation->run();
 	
 	}//end of function
-		
+	
+	
+	
+	/*
+	
+	public function index($fields_list = "*", $limit = 25 , $offset = 0){
+	
+	$this->output->enable_profiler(false);
+	$form_data = array(); 
+	$record_set = $this->Category_Model->select_records('*',$limit,$offset);
+	$form_data['record_set'] = $record_set;
+	$form_data['limit'] = $limit;
+	$form_data['offset'] = $offset;
+	$this->load->view('AdminLTE-master/categories/index',$form_data);
+	
+	}//end of function
+	
+	*/
+	
 	
 	
 	/**
@@ -175,7 +208,7 @@ class Patients extends CI_Controller {
 	public function produce_grid_feed($limit=25,$offset=0){
 	
 	
-		$record_set = $this->patients_model->select_records('*',$limit,$offset);
+		$record_set = $this->prescriptions_model->select_records('*',$limit,$offset);
 	
 		// init xml writer
 		$xml = new Xml_writer();
@@ -185,23 +218,21 @@ class Patients extends CI_Controller {
 	
 		foreach($record_set['result_set'] as $record ){
 
-			//"Lens Id,Categor,Color,Power,Price,Qty,Supplier,Details,Bill No,Added Date,Added by"
-			$xml->startBranch('row',array('id' =>$record['p_id']));
-			$action = '<a href="'.site_url('patients/edit/'.$record['p_id'].'').'" onclick="">Edit</a>  |
-					   <a href="javascript:void(0);" onclick="delete_record('.$record['p_id'].')">Delete</a> ';
+			//Pres id   ,Visited Date ,Patione Name ,Due re visit date,Order Status, Bill Total, Paid Amount, Attended By
+			
+			$xml->startBranch('row',array('id' =>$record['pre_id']));
+			$action = '<a href="'.site_url('lenses/edit/'.$record['pre_id'].'').'" onclick="">Edit</a>  |
+					   <a href="javascript:void(0);" onclick="delete_record('.$record['pre_id'].')">Delete</a> ';
 			$xml->addNode('cell',$action,null, true);
-			$xml->addNode('cell',$record['p_id'],null, true);			
- 			$xml->addNode('cell',$record['title'].$record['full_name'],null, true);
- 			$xml->addNode('cell',$record['nic_no'],null, true); 			
- 			$xml->addNode('cell',$record['email'],null, true); 			
- 			$xml->addNode('cell',$record['address'],null, true);
- 			$xml->addNode('cell',$record['home_tp_no'],null, true);
- 			$xml->addNode('cell',$record['mobile_no'],null, true);
- 			$xml->addNode('cell',$record['profession'],null, true);
- 			$xml->addNode('cell',$record['dob'],null, true);
- 			$xml->addNode('cell',$record['health_issues'],null, true);
- 			$xml->addNode('cell',$record['added_date'],null, true);
+			$xml->addNode('cell',$record['pre_id'],null, true);			
+ 			$xml->addNode('cell',$record['visited_date'],null, true);
+ 			$xml->addNode('cell',$record['p_id'],null, true); 			
+ 			$xml->addNode('cell',$record['revisit_due_date'],null, true); 			 			
+ 			$xml->addNode('cell',$record['order_status'],null, true);
+ 			$xml->addNode('cell',$record['priscript_total'],null, true);
+ 			$xml->addNode('cell',$record['amount_paid'],null, true);
  			$xml->addNode('cell',$record['added_by'],null, true);
+
 			$xml->endBranch();	
 		}
 	
@@ -228,11 +259,11 @@ class Patients extends CI_Controller {
 	 */
 	public function delete($id=null){
 	
-		$record_set = $this->patients_model->select_records('*',null,null,array('p_id'=>$id));
+		$record_set = $this->prescriptions_model->select_records('*',null,null,array('pre_id'=>$id));
 		$form_data['form_data_val'] = $record_set['result_set'][0];
 	
-		$data = array('p_id' => $id);
-		$status = $this->patients_model->delete($data);
+		$data = array('pre_id' => $id);
+		$status = $this->prescriptions_model->delete($data);
 		echo $status;	
 	
 	}//end of delete
@@ -250,7 +281,7 @@ class Patients extends CI_Controller {
 		$optionsOnly = isset($myParams['optionsonly'])? $myParams['optionsonly']:false;
 		$optionsOnly = ($optionsOnly == 'true')? true:false;
 	
-		$dataset = $this->patients_model->select_records();
+		$dataset = $this->prescriptions_model->select_records();
 			
 		$wrapped_data['data'] = $dataset['result_set'];
 		$wrapped_data['selectByValue'] = $selectByValue;
