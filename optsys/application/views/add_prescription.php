@@ -1,9 +1,34 @@
 <?php include 'html_head.php';?>  
 <?php include 'navigation.php';?>
 <div class="container">
+
+<!-- Modal -->
+<div class="modal fade" id="products_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="modal-title" id="myModalLabel">Products</h2>
+      </div>
+      <div class="modal-body ">
+      	
+      		<div class="embed-responsive embed-responsive-16by9">        		
+        		<iframe id="products_iframe" class="embed-responsive-item" src=""  frameborder="0" allowtransparency="true"></iframe> 
+        	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="" >Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
 <form action="" method="post" class="form-horizontal">
 
-	<div class="row">	
+<div class="row">	
 <h1>Add New Prescription</h1>	
 	
 	<div class="col-sm-12 col-md-6">
@@ -67,25 +92,27 @@
 	    </div>
 	  </div> 
 	
-
-     <div class="form-group">
-	    <label for="btnSave" class="col-md-6 control-label">Prescribe Lens or Frames</label>
-	    <div class="col-md-6">
-	    <button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Save</button>	     
-	    <a class="btn btn-primary btn-md btn-large" href="<?php echo site_url('lenses/index')?>" role="button">Cancel</a>
-	    </div>
-    </div>	
-	  
-	  
-	  
- 
 	 <div class="form-group">
 	    <label for="details" class="col-md-6 control-label">Prescription Details</label>
 	    <div class="col-md-6">
 	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
 	    </div>
 	  </div>
+
 	  
+	 <div class="form-group">
+	    <label for="paid_by" class="col-md-6 control-label">Prescribe</label>
+	    <div class="col-md-6">	    
+	    <?php 
+	    $other = ' class="form-control " id="paid_by" onchange="show_products(this)"';
+	    $products = array('Only Frame' => 'Only Frame','Only Lenses' => 'Only Lenses', 'Both Lens and Frame' => 'Both Lenses and Frame');
+	    //echo form_dropdown('products', $products,$fields['products'],$other);
+		?>
+		 <a class="btn btn-primary btn-md btn-large" href="#" role="button" onclick="show_products('lens')">Lens</a>	     
+	     <a class="btn btn-primary btn-md btn-large" href="#" role="button" onclick="show_products('frame')">Frames</a>
+		</div>
+	  </div>
+	  	  
 	  
   <div class="form-group">
 		    <label for="amount_paid" class="col-md-6 control-label">Paid Amount</label>
@@ -131,6 +158,21 @@
 <script>
 
 function check_val(sel){}
+
+function show_products(value){
+	
+	//'Only Frame' => 'Only Frame','Only Lenses' => 'Only Lenses', 'Both Lens and Frame' => 'Both Lenses and Frame'
+	if (value == 'lens'){
+		url='<?php echo site_url("/prescriptions/select_products/lens")?>';
+	} else if(value=='frame'){
+		url='<?php echo site_url("/prescriptions/select_products/frame")?>';
+	}
+	$('#products_iframe').attr('src',url);
+	$('#products_model').modal({
+		'backdrop':false		
+	});
+	
+}
 
 var myCalendar;
 myCalendar = new dhtmlXCalendarObject(["visited_date"]);

@@ -183,21 +183,10 @@ class Prescriptions extends CI_Controller {
 	
 	
 	
-	/*
-	
-	public function index($fields_list = "*", $limit = 25 , $offset = 0){
-	
-	$this->output->enable_profiler(false);
-	$form_data = array(); 
-	$record_set = $this->Category_Model->select_records('*',$limit,$offset);
-	$form_data['record_set'] = $record_set;
-	$form_data['limit'] = $limit;
-	$form_data['offset'] = $offset;
-	$this->load->view('AdminLTE-master/categories/index',$form_data);
-	
-	}//end of function
-	
-	*/
+	public function select_products($product_type){
+		$form_data['product_type'] = $product_type;
+		$this->load->view('select_products',$form_data);
+	}
 	
 	
 	
