@@ -9,7 +9,8 @@ class Prescriptions extends CI_Controller {
 		$this->load->model('suppliers_model');
 		$this->load->model('prescriptions_model');
 		$this->load->model('category_model');
-		$this->load->model('patients_model');		
+		$this->load->model('patients_model');
+		$this->load->model('frames_model');
 	}//end of function
 
 	/**
@@ -184,10 +185,37 @@ class Prescriptions extends CI_Controller {
 	
 	
 	public function select_products($product_type){
+		
 		$form_data['product_type'] = $product_type;
-		$this->load->view('select_products',$form_data);
+		$this->load->view('prescribe_forms',$form_data);
+		
 	}
 	
+	
+	public function get_frame_by_id($frame_id){
+		
+		$record_set = $this->frames_model->select_records('*',null,null,array('frame_id'=>$frame_id));
+		$result = $record_set['result_set'][0];
+		/**
+		 *'frame_id' => string '8' (length=1)
+  'frame_type' => string 'Full Rim Frames' (length=15)
+  'frame_brand' => string '77' (length=2)
+  'frame_material' => string 'Plastic' (length=7)
+  'frame_color' => string '77' (length=2)
+  'frame_size' => string '77' (length=2)
+  'frame_serial_no' => string '77' (length=2)
+  'qty' => string '77' (length=2)
+  're_order_qty' => string '77' (length=2)
+  'price' => string '77.77' (length=5)
+  'cost' => string '77.77' (length=5)
+  'details' => string '77' (length=2)
+  'added_by' => string '1' (length=1) 
+		 */		
+		$frm_str = $result['frame_id'].'-'.
+				$result['frame_id'].'-'.
+		
+		
+	}
 	
 	
 	/**

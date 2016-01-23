@@ -206,7 +206,7 @@ class Frames extends CI_Controller {
 	 * This function is to produce dhtmlx grid
 	 * @param string $feed_type
 	 */
-	public function produce_grid_feed($limit=25,$offset=0){
+	public function produce_grid_feed($limit=25,$offset=0,$reason=null){
 	
 	
 		$record_set = $this->frames_model->select_records('*',$limit,$offset);
@@ -218,22 +218,33 @@ class Frames extends CI_Controller {
 		$xml->initiate();
 	
 		foreach($record_set['result_set'] as $record ){
-				
-			$xml->startBranch('row',array('id' =>$record['frame_id']));
-			$xml->addNode('cell',$record['frame_id'],null, true);
-			$xml->addNode('cell',$record['frame_serial_no'],null, true);
-			$xml->addNode('cell',$record['frame_material'],null, true);
-			$xml->addNode('cell',$record['frame_type'],null, true);
-			$sup_record_set = $this->suppliers_model->select_records('*',1,0,array('sup_id' => $record['sup_id']));			
-			$xml->addNode('cell',$sup_record_set['result_set'][0]['company_name'],null, true);
-			$xml->addNode('cell',$record['price'],null, true);
-			$xml->addNode('cell',$record['qty'],null, true);	
-			$xml->addNode('cell',$record['added_date'],null, true);
-			$action = '<a href="javascript:void(0);" onclick="edit_record('.$record['frame_id'].')">Edit</a>  |  
-					   <a href="javascript:void(0);" onclick="delete_record('.$record['frame_id'].')">Delete</a> ';
-			$xml->addNode('cell',$action,null, true);
-			$xml->endBranch();	
-		}
+
+			
+				$xml->startBranch('row',array('id' =>$record['frame_id']));
+				if(empty($reason)){
+					$action = '<a href="javascript:void(0);" onclick="edit_record('.$record['frame_id'].')">Edit</a>  |
+						   <a href="javascript:void(0);" onclick="delete_record('.$record['frame_id'].')">Delete</a> ';
+				}else if($reason='for-prescribe'){
+					if($record['qty'] >= 1){
+						$action = '<a href="javascript:void(0);" onclick="add_to_cart('.$record['frame_id'].')">Add</a>';
+					}else{
+						$action = 'No Product';
+					}
+					
+				}
+				$xml->addNode('cell',$action,null, true);				
+				$xml->addNode('cell',$record['frame_id'],null, true);
+				$xml->addNode('cell',$record['frame_serial_no'],null, true);
+				$xml->addNode('cell',$record['frame_material'],null, true);
+				$xml->addNode('cell',$record['frame_type'],null, true);
+				$sup_record_set = $this->suppliers_model->select_records('*',1,0,array('sup_id' => $record['sup_id']));			
+				$xml->addNode('cell',$sup_record_set['result_set'][0]['company_name'],null, true);
+				$xml->addNode('cell',$record['price'],null, true);
+				$xml->addNode('cell',$record['qty'],null, true);	
+				$xml->addNode('cell',$record['added_date'],null, true);
+				$xml->endBranch();		
+			
+		}//end foreach
 	
 		$data = array();
 		$xml->getXml(true);

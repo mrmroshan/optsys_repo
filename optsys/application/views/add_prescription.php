@@ -84,35 +84,87 @@
   	</select>
   	</div>
 	</div>
-	  
-	 <div class="form-group">
-	    <label for="revisit_due_date" class="col-md-6 control-label">Re Visit Date</label>
-	    <div class="col-md-6">
-	    <input type="text" class="form-control " id="revisit_due_date" name="revisit_due_date" placeholder="Click to select date" value="<?php echo $fields['revisit_due_date']?>" readonly >
-	    </div>
-	  </div> 
+  
 	
+
 	 <div class="form-group">
-	    <label for="details" class="col-md-6 control-label">Prescription Details</label>
+	    <label for="details" class="col-md-6 control-label">Prescribe Lens for Left Eye</label>
 	    <div class="col-md-6">
-	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
+	    <div class="row">
+	    <div class="col-md-6">
+	    <input type="text" class="form-control " id="left_lens" name="left_lens" placeholder="" value="">
+	    </div>
+	    <div class="col-md-6">
+	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_products('lens')">Select</a>
+	    </div>
+	    </div>
 	    </div>
 	  </div>
 
-	  
 	 <div class="form-group">
-	    <label for="paid_by" class="col-md-6 control-label">Prescribe</label>
+	    <label for="details" class="col-md-6 control-label">Prescribe Lens for Right Eye</label>
+	    <div class="col-md-6">
+	    <div class="row">
+	    <div class="col-md-6">
+	    <input type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="">
+	    </div>
+	    <div class="col-md-6">
+	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_products('lens')">Select</a>
+	    </div>
+	    </div>
+	    </div>
+	  </div>
+	  	  
+
+	  <div class="form-group">
+	    <label for="details" class="col-md-6 control-label">Frame</label>
+	    <div class="col-md-6">
+	    <div class="row">
+	    <div class="col-md-6">
+	    <input type="text" class="form-control " id="frame" name="frame" placeholder="" value="">
+	    </div>
+	    <div class="col-md-6">
+	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_frames()">Select Frame</a>
+	    </div>
+	    </div>
+	    </div>
+	  </div>
+	  
+	  
+	  <!-- 
+	 <div class="form-group">
+	    <label for="paid_by" class="col-md-6 control-label">Prescribe Lens</label>
 	    <div class="col-md-6">	    
 	    <?php 
 	    $other = ' class="form-control " id="paid_by" onchange="show_products(this)"';
 	    $products = array('Only Frame' => 'Only Frame','Only Lenses' => 'Only Lenses', 'Both Lens and Frame' => 'Both Lenses and Frame');
 	    //echo form_dropdown('products', $products,$fields['products'],$other);
 		?>
-		 <a class="btn btn-primary btn-md btn-large" href="#" role="button" onclick="show_products('lens')">Lens</a>	     
-	     <a class="btn btn-primary btn-md btn-large" href="#" role="button" onclick="show_products('frame')">Frames</a>
+		 <a class="btn btn-primary btn-md btn-large" href="#" role="button" onclick="show_products('lens')">Left</a>
+		 <a class="btn btn-primary btn-md btn-large" href="#" role="button" onclick="show_products('lens')">Right</a>     
+	     
 		</div>
 	  </div>
-	  	  
+	  -->	  
+	  
+	  <div class="form-group">
+	    <label for="details" class="col-md-6 control-label">Prescription Details</label>
+	    <div class="col-md-6">
+	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
+	    </div>
+	  </div>
+	  
+	  
+	  
+	  <div class="form-group">
+	    <label for="revisit_due_date" class="col-md-6 control-label">Re Visit Date</label>
+	    <div class="col-md-6">
+	    <input type="text" class="form-control " id="revisit_due_date" name="revisit_due_date" placeholder="Click to select date" value="<?php echo $fields['revisit_due_date']?>" readonly >
+	    </div>
+	  </div>
+	  
+	  
+	  
 	  
   <div class="form-group">
 		    <label for="amount_paid" class="col-md-6 control-label">Paid Amount</label>
@@ -132,7 +184,8 @@
 		?>
 		</div>
 	  </div>
-	 	  
+
+	  
   
 	
 	<!-- </div>end of col-sm-12  
@@ -158,6 +211,16 @@
 <script>
 
 function check_val(sel){}
+
+function show_frames(){
+
+	url='<?php echo site_url("/prescriptions/select_products/frame")?>';
+	$('#products_iframe').attr('src',url);
+	$('#products_model').modal({
+		'backdrop':false		
+	});
+}
+
 
 function show_products(value){
 	
