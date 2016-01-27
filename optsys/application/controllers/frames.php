@@ -228,12 +228,13 @@ class Frames extends CI_Controller {
 					if($record['qty'] >= 1){
 						$action = '<a href="javascript:void(0);" onclick="add_to_cart('.$record['frame_id'].')">Add</a>';
 					}else{
-						$action = 'No Product';
+						$action = 'Not Available';
 					}
 					
 				}
 				$xml->addNode('cell',$action,null, true);				
 				$xml->addNode('cell',$record['frame_id'],null, true);
+				$xml->addNode('cell',$record['frame_size'],null, true);
 				$xml->addNode('cell',$record['frame_serial_no'],null, true);
 				$xml->addNode('cell',$record['frame_material'],null, true);
 				$xml->addNode('cell',$record['frame_type'],null, true);
@@ -251,6 +252,8 @@ class Frames extends CI_Controller {
 	
 	
 	}//end of index()
+	
+	
 	
 	private function redirect_home($url){
 	

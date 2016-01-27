@@ -8,7 +8,7 @@ body{padding:0px;}
 
 	<div class="row">	
 	<div class="col-sm-12">
-	<h1>Forms</h1>
+	<h1>Frams</h1>
 	
 		  <!-- Nav tabs -->
 		  <ul class="nav nav-tabs" role="tablist">
@@ -51,34 +51,35 @@ $('#myTabs a').click(function (e) {
 mygrid = new dhtmlXGridObject('gridbox');
 mygrid.setImagePath("<?php echo base_url('dhtmlx/dhtmlxGrid/codebase/imgs')?>");
 mygrid.setSkin("dhx_skyblue");
-mygrid.setHeader("Action,Frame Id,Frame Serial No,Material,Type,Supplier,Price,Qty,Added Date");
-mygrid.setColSorting("str,int,str,str,str,str,int,int");
-mygrid.setInitWidths("50,70,100,100,100,200,100,80,80,80");
-mygrid.setColAlign("center,right,right,right,right,right,right,right,right,right");
-mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
-mygrid.attachHeader("#rspan,#text_filter,#text_filter,#rspan,#rspan,#select_filter,#rspan,#rspan,#rspan");
+mygrid.setHeader("Action,Frame Id,Size,Frame Serial No,Material,Type,Supplier,Price,Qty,Added Date");
+mygrid.setColSorting("str,int,int,str,str,str,str,int,int");
+mygrid.setInitWidths("100,70,100,100,100,100,200,100,80,80,80");
+mygrid.setColAlign("center,right,right,right,right,right,right,right,right,right,right");
+mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
+mygrid.attachHeader("#rspan,#text_filter,#text_filter,#text_filter,#rspan,#rspan,#select_filter,#rspan,#rspan,#rspan");
 mygrid.init();
 mygrid.load("<?php echo site_url("/frames/produce_grid_feed/1000/0/for-prescribe")?>");
 
 
 function add_to_cart(frame_id){
+	//var str = $('#details', window.parent.document).val();
+	//$('#details', window.parent.document).val(str+frame_id
+	
 	//first get frame data
 	url='<?php echo site_url("/prescriptions/get_frame_by_id")?>/'+frame_id;
     $.ajax({
         url: url, 
         success: function(result){
-        	$("#div1").html(result);
+        	//$("#div1").html(result);
+        	$('#frame', window.parent.document).val(result);
+        	$('#frame_from', window.parent.document).val("stock");
     	},
     	error: function(xhr){
     	        alert('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);
     	}
-    });
+    });	
 
-	
-	
-	var str = $('#details', window.parent.document).val();
-	$('#details', window.parent.document).val(str+frame_id);
-	
+    window.parent.close_model(); 
 }
 </script>
 

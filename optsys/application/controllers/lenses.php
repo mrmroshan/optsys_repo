@@ -208,7 +208,7 @@ class Lenses extends CI_Controller {
 	 * This function is to produce dhtmlx grid
 	 * @param string $feed_type
 	 */
-	public function produce_grid_feed($limit=25,$offset=0){
+	public function produce_grid_feed($limit=25,$offset=0,$reason=null){
 	
 	
 		$record_set = $this->lenses_model->select_records('*',$limit,$offset);
@@ -223,8 +223,17 @@ class Lenses extends CI_Controller {
 
 			//"Lens Id,Categor,Color,Power,Price,Qty,Supplier,Details,Bill No,Added Date,Added by"
 			$xml->startBranch('row',array('id' =>$record['lens_id']));
-			$action = '<a href="'.site_url('lenses/edit/'.$record['lens_id'].'').'" onclick="">Edit</a>  |
+			if(empty($reason)){
+				$action = '<a href="'.site_url('lenses/edit/'.$record['lens_id'].'').'" onclick="">Edit</a>  |
 					   <a href="javascript:void(0);" onclick="delete_record('.$record['lens_id'].')">Delete</a> ';
+			}else if($reason =='for-prescribe'){
+				if($record['qty'] >= 1){
+					$action = '<a href="javascript:void(0);" onclick="add_to_cart('.$record['lens_id'].')">Add</a>';
+				}else{
+					$action = 'Not Available';
+				}				
+			}
+			
 			$xml->addNode('cell',$action,null, true);
 			$xml->addNode('cell',$record['lens_id'],null, true);
 			$cat_record_set = $this->category_model->select_records('*',1,0,array('cat_id' => $record['cat_id']));
@@ -250,6 +259,8 @@ class Lenses extends CI_Controller {
 	
 	
 	}//end of index()
+	
+	
 	
 	private function redirect_home($url){
 	

@@ -11,6 +11,7 @@ class Prescriptions extends CI_Controller {
 		$this->load->model('category_model');
 		$this->load->model('patients_model');
 		$this->load->model('frames_model');
+		$this->load->model('lenses_model');
 	}//end of function
 
 	/**
@@ -185,9 +186,15 @@ class Prescriptions extends CI_Controller {
 	
 	
 	public function select_products($product_type){
-		
+
 		$form_data['product_type'] = $product_type;
-		$this->load->view('prescribe_forms',$form_data);
+		if($product_type == 'frame'){
+			$this->load->view('prescribe_frames',$form_data);
+		}else if($product_type == 'r_lens'){						
+			$this->load->view('prescribe_lens_right',$form_data);
+		}else if($product_type == 'l_lens'){						
+			$this->load->view('prescribe_lens_left',$form_data);
+		}
 		
 	}
 	
@@ -196,27 +203,32 @@ class Prescriptions extends CI_Controller {
 		
 		$record_set = $this->frames_model->select_records('*',null,null,array('frame_id'=>$frame_id));
 		$result = $record_set['result_set'][0];
-		/**
-		 *'frame_id' => string '8' (length=1)
-  'frame_type' => string 'Full Rim Frames' (length=15)
-  'frame_brand' => string '77' (length=2)
-  'frame_material' => string 'Plastic' (length=7)
-  'frame_color' => string '77' (length=2)
-  'frame_size' => string '77' (length=2)
-  'frame_serial_no' => string '77' (length=2)
-  'qty' => string '77' (length=2)
-  're_order_qty' => string '77' (length=2)
-  'price' => string '77.77' (length=5)
-  'cost' => string '77.77' (length=5)
-  'details' => string '77' (length=2)
-  'added_by' => string '1' (length=1) 
-		 */		
-		$frm_str = $result['frame_id'].'-'.
-				$result['frame_id'].'-'.
-		
-		
+		$frm_str = $result['frame_id'].'::'.
+				$result['frame_size'].'::'.
+				$result['frame_material'].'::'.
+				$result['frame_type'].'::'.
+				$result['frame_brand'].'::'.
+				$result['price'];
+		echo $frm_str;
 	}
 	
+	
+	public function get_lens_by_id($lens_id){
+		
+		$record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$lens_id));
+		$result = $record_set['result_set'][0];
+		
+		$cat_record_set = $this->category_model->select_records('*',1,0,array('cat_id' => $result['cat_id']));
+		$cat = (empty($cat_record_set['result_set']))?'-':$cat_record_set['result_set'][0]['category'];
+		
+		
+		$str = $result['lens_id'].'::'.
+				$result['lens_power'].'::'.
+				$cat.'::'.
+				$result['lens_color'].'::'.				
+				$result['price'];
+		echo $str;
+	}
 	
 	/**
 	 * This function is to produce dhtmlx grid

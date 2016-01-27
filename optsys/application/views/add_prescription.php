@@ -88,45 +88,30 @@
 	
 
 	 <div class="form-group">
-	    <label for="details" class="col-md-6 control-label">Prescribe Lens for Left Eye</label>
-	    <div class="col-md-6">
-	    <div class="row">
+	    <label for="left_lens" class="col-md-6 control-label">Lens for Left Eye</label>	    
 	    <div class="col-md-6">
 	    <input type="text" class="form-control " id="left_lens" name="left_lens" placeholder="" value="">
-	    </div>
-	    <div class="col-md-6">
-	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_products('lens')">Select</a>
-	    </div>
-	    </div>
-	    </div>
+	    <input type="hidden" id="left_lens_from" name="left_lens_from" value="">
+	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('l_lens')">Select for Left Eye</a>	    
+	    </div>    
 	  </div>
-
+	
 	 <div class="form-group">
-	    <label for="details" class="col-md-6 control-label">Prescribe Lens for Right Eye</label>
-	    <div class="col-md-6">
-	    <div class="row">
+	    <label for="right_lens" class="col-md-6 control-label">Lens for Right Eye</label>	    
 	    <div class="col-md-6">
 	    <input type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="">
-	    </div>
-	    <div class="col-md-6">
-	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_products('lens')">Select</a>
-	    </div>
-	    </div>
-	    </div>
+	    <input type="hidden" id="right_lens_from" name="right_lens_from" value="">
+	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('r_lens')">Select for Right Eye</a>	    
+	    </div>    
 	  </div>
 	  	  
 
 	  <div class="form-group">
-	    <label for="details" class="col-md-6 control-label">Frame</label>
-	    <div class="col-md-6">
-	    <div class="row">
-	    <div class="col-md-6">
+	    <label for="frame" class="col-md-6 control-label">Frame</label>
+	    <div class="col-md-6">	    
 	    <input type="text" class="form-control " id="frame" name="frame" placeholder="" value="">
-	    </div>
-	    <div class="col-md-6">
-	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_frames()">Select Frame</a>
-	    </div>
-	    </div>
+	    <input type="hidden" id="frame_from" name="frame_from" value="">	    
+	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_frames()">Select Frame</a>	    
 	    </div>
 	  </div>
 	  
@@ -153,16 +138,14 @@
 	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
 	    </div>
 	  </div>
+	
 	  
-	  
-	  
-	  <div class="form-group">
-	    <label for="revisit_due_date" class="col-md-6 control-label">Re Visit Date</label>
-	    <div class="col-md-6">
-	    <input type="text" class="form-control " id="revisit_due_date" name="revisit_due_date" placeholder="Click to select date" value="<?php echo $fields['revisit_due_date']?>" readonly >
-	    </div>
-	  </div>
-	  
+	<div class="form-group">
+		    <label for="total" class="col-md-6 control-label">Total</label>
+		    <div class="col-md-6">
+		    <input type="text" class="form-control " id="total" name="total" placeholder="" value="">
+		    </div>
+	 </div>	  
 	  
 	  
 	  
@@ -221,6 +204,20 @@ function show_frames(){
 	});
 }
 
+function show_lens(which_side){
+	
+	url='<?php echo site_url("/prescriptions/select_products/")?>/'+ which_side;
+	$('#products_iframe').attr('src',url);
+	$('#products_model').modal({
+		'backdrop':false		
+	});
+
+}
+
+
+function close_model(){
+	$('#products_model').modal('toggle');
+}
 
 function show_products(value){
 	
