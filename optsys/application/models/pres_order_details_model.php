@@ -1,9 +1,9 @@
 <?php 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Prescriptions_model extends CI_Model{
+class Pres_order_details_model extends CI_Model{
 
-	var $table_name = 'opt_prescriptions';
+	var $table_name = 'opt_pres_details';
 		
 	/**
 	 * common constructor
@@ -92,9 +92,6 @@ class Prescriptions_model extends CI_Model{
 		
 	}//end of save_records()
 	
-	public function get_last_insert_id(){
-		return $this->db->insert_id();
-	}
 	
 	/**
 	 * common function to update record

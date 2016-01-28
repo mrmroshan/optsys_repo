@@ -62,8 +62,6 @@ mygrid.load("<?php echo site_url("/frames/produce_grid_feed/1000/0/for-prescribe
 
 
 function add_to_cart(frame_id){
-	//var str = $('#details', window.parent.document).val();
-	//$('#details', window.parent.document).val(str+frame_id
 	
 	//first get frame data
 	url='<?php echo site_url("/prescriptions/get_frame_by_id")?>/'+frame_id;
@@ -73,6 +71,19 @@ function add_to_cart(frame_id){
         	//$("#div1").html(result);
         	$('#frame', window.parent.document).val(result);
         	$('#frame_from', window.parent.document).val("stock");
+
+        	var prev_tot = 0.00;
+        	var tot = $('#total', window.parent.document).val();
+        	var data = result.split('::');
+        	var price = data[data.length - 1];//last element is price
+        	if(tot.length == 0){
+        		$('#total', window.parent.document).val(price);
+        	}else{
+				prev_tot = $('#total', window.parent.document).val();
+				tot = parseFloat(prev_tot) + parseFloat(price);
+				$('#total', window.parent.document).val(tot);
+            }
+        	
     	},
     	error: function(xhr){
     	        alert('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);

@@ -71,6 +71,20 @@ function add_to_cart(lens_id){
         	//$("#div1").html(result);
         	$('#right_lens', window.parent.document).val(result);
         	$('#right_lens_from', window.parent.document).val("stock");
+
+        	var prev_tot = 0.00;
+        	var tot = $('#total', window.parent.document).val();
+        	var data = result.split('::');
+        	var price = data[data.length - 1];//last element is price
+        	if(tot.length == 0){
+        		$('#total', window.parent.document).val(price);
+        	}else{
+				prev_tot = $('#total', window.parent.document).val();
+				tot = parseFloat(prev_tot) + parseFloat(price);
+				$('#total', window.parent.document).val(tot);
+            }
+        	
+        	
     	},
     	error: function(xhr){
     	        alert('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);

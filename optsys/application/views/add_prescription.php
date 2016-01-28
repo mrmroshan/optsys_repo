@@ -67,7 +67,7 @@
 	 <div class="form-group">
 	    <label for="visited_date" class="col-md-6 control-label">Date</label>
 	    <div class="col-md-6">
-	    <input type="text" class="form-control " id="visited_date" name="visited_date" placeholder="Click to select date" value="<?php echo $fields['visited_date']?>" readonly >
+	    <input type="text" class="form-control " id="visited_date" name="visited_date" placeholder="Click to select date" value="<?php echo (empty($fields['visited_date']))?date("Y-m-d"):$fields['visited_date'];?>" readonly >
 	    </div>
 	  </div> 
 		  	
@@ -75,7 +75,7 @@
 	<div class="form-group">
 		<label for="details" class="col-md-6 control-label">Patient Name</label>
 		<div class="col-md-6">
-  		<select class="selectpicker" data-live-search="true" onchange="">   
+  		<select class="selectpicker" name="p_id" id="p_id" data-live-search="true" onchange="">   
     	<?php 
     	for($i=0;$i<count($patlist);$i++){
     		echo '<option value="'.$patlist[$i]['p_id'].'" >'.$patlist[$i]['title'].$patlist[$i]['full_name'].'</option>';
@@ -132,12 +132,6 @@
 	  </div>
 	  -->	  
 	  
-	  <div class="form-group">
-	    <label for="details" class="col-md-6 control-label">Prescription Details</label>
-	    <div class="col-md-6">
-	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
-	    </div>
-	  </div>
 	
 	  
 	<div class="form-group">
@@ -168,6 +162,13 @@
 		</div>
 	  </div>
 
+	  <div class="form-group">
+	    <label for="details" class="col-md-6 control-label">Additional Details</label>
+	    <div class="col-md-6">
+	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
+	    </div>
+	  </div>
+	  
 	  
   
 	

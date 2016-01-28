@@ -7,7 +7,7 @@ class Prescriptions extends CI_Controller {
 		parent::__construct();	
 		$this->load->model('prescriptions_model');
 		$this->load->model('suppliers_model');
-		$this->load->model('prescriptions_model');
+		$this->load->model('pres_order_details_model');
 		$this->load->model('category_model');
 		$this->load->model('patients_model');
 		$this->load->model('frames_model');
@@ -39,27 +39,106 @@ class Prescriptions extends CI_Controller {
 						
 		if(isset($post['btnSave'])){
 				
-			$validation = $this->validate_form();
+			//var_dump($post);exit;
+			/*
+			  'visited_date' => string '2016-01-26' (length=10)
+			   'p_id' => string '1' (length=1)
+  'left_lens' => string '2::+56::CR39 - Normal - Clear::Greenish red::3500' (length=49)
+  'left_lens_from' => string 'stock' (length=5)
+  'right_lens' => string '6::+20::CR39 - Photo Cromic::Red::4000' (length=38)
+  'right_lens_from' => string 'stock' (length=5)
+  'frame' => string '7::66::Memory Metal::Half-Eye Frames::66::66.66' (length=47)
+  'frame_from' => string 'stock' (length=5)
+  'total' => string '7566.66' (length=7)
+  'amount_paid' => string '7000' (length=4)
+  'paid_by' => string 'Cash' (length=4)
+  'details' => string 'testing' (length=7)
+  'btnSave' => string '' (length=0) 
+			 * */
+			
+			$validation = true;//$this->validate_form();
 			
 			if($validation){
-				//remove submit button from the array
-				foreach($post as $k => $v){
-					if($k == 'btnSave')unset($post[$k]);
-				}
 				
-				$save_data =$post;
-				$post['added_date'] = date('Y-m-d');
-				$post['added_by'] = '1';
+				//1 add to prescription table
+				$save_data = array(
+						'p_id' => $post['p_id'],
+						'visited_date'=>$post['visited_date'],
+						'order_status'=>'new',
+						'priscript_total'=>$post['total'],
+						'amount_paid'=>$post['amount_paid'],
+						'paid_by'=>$post['paid_by'],
+						'details'=>$post['details'],
+						'added_date'=>date('Y-m-d'),
+						'added_by'=>1							
+				); 
 					
 				if(!$this->prescriptions_model->is_exist($save_data)){
 						
-					$result = $this->prescriptions_model->save($post);
+					$result = $this->prescriptions_model->save($save_data);
+					$prs_id = $this->prescriptions_model->get_last_insert_id();
 						
 					if($result>0){
+						
+						//2add orderd product data into opt_pres_details
+						
+						$order_details=array();
+						$item_id = null;
+						
+						if(!empty($post['frame'])){
+							//'frame' => string '7::66::Memory Metal::Half-Eye Frames::66::66.66' (length=47)
+							$string =explode('::',$post['frame']);
+							$item_id=$string[0];
+							$price = $string[4];
+							$order_details[] = array(
+									'pre_id'=>$prs_id,
+									'item_id'=> $item_id,
+									'qty'=>1,
+									'sub_total'=>$price,
+									'prod_type'=>'frame',
+									'added_date'=>date("Y-m-d"),
+									'added_by'=>1
+							);
+						}											
+						
+						if(!empty($post['left_lens'])){
+							//'left_lens' => string '2::+56::CR39 - Normal - Clear::Greenish red::3500' 
+							$string =explode('::',$post['left_lens']);
+							$item_id=$string[0];
+							$price = $string[4];
+							$order_details[] = array(
+									'pre_id'=>$prs_id,
+									'item_id'=> $item_id,
+									'qty'=>1,
+									'sub_total'=>$price,
+									'prod_type'=>'left_lens',
+									'added_date'=>date("Y-m-d"),
+									'added_by'=>1									
+							);
+						}
+						if(!empty($post['right_lens'])){
+							//''right_lens' => string '6::+20::CR39 - Photo Cromic::Red::4000' (length=38)
+							$string =explode('::',$post['right_lens']);
+							$item_id=$string[0];
+							$price = $string[4];
+							$order_details[] = array(
+									'pre_id'=>$prs_id,
+									'item_id'=> $item_id,
+									'qty'=>1,
+									'sub_total'=>$price,
+									'prod_type'=>'right_lens',
+									'added_date'=>date("Y-m-d"),
+									'added_by'=>1
+							);
+						}
+						foreach($order_details as $order){
+							$result2 = $this->pres_order_details_model->save($order);
+						}
+						
 						$form_data['gen_message'] = array(
 								'type' => 'success',
 								'text' => 'Data saved!');
-						$this->redirect_home(site_url('lenses/index'));
+						$this->redirect_home(site_url('prescriptions/index'));
 					}else{
 	
 						$form_data['gen_message'] = array(
