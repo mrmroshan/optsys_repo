@@ -391,6 +391,24 @@ class Prescriptions extends CI_Controller {
 		echo $str;
 	}
 	
+	
+	public function get_patient_by_id($p_id){
+	
+		$record_set = $this->patients_model->select_records('*',null,null,array('p_id'=>$p_id));
+		$result = $record_set['result_set'][0];
+	
+		
+		$str = $result['p_id'].'::'.
+				$result['mobile_no'].'::'.				
+				$result['home_tp_no'].'::'.
+				$result['address'].'::'.
+				$result['nic_no'].'::'.
+				$result['dob'];
+		echo $str;
+	}
+	
+	
+	
 	/**
 	 * This function is to produce dhtmlx grid
 	 * @param string $feed_type

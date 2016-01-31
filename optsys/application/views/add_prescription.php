@@ -67,16 +67,20 @@
 	<div class="col-sm-12 col-md-6">
 	
 	<div class="panel panel-default">
-  		<div class="panel-heading">Patient Details</div>
+  		<div class="panel-heading">    	
+    	<h3 class="panel-title pull-left">Patient Details</h3> 		 
+        <a href="<?php echo site_url('/patients/add/pres_form')?>" class="btn btn-primary btn-md btn-large pull-right" >Add New</a>
+        <div class="clearfix"></div>
+  		</div>
   		<div class="panel-body">	
-  		
-  		
+  		  		
 
 	  		<div class="form-group">
 			<label for="details" class="col-md-3 control-label">Patient Name</label>
 			<div class="col-md-9">
-	  		<select class="selectpicker form-control" name="p_id" id="p_id" data-live-search="true" onchange="">   
+	  		<select class="selectpicker form-control" name="p_id" id="p_id" data-live-search="true" onchange="get_patient_details(this)">   
 	    	<?php 
+	    	echo '<option value="" selected="selected">Please select</option>';
 	    	for($i=0;$i<count($patlist);$i++){
 	    		if( $fields['p_id'] == $patlist[$i]['p_id']){
 	    			echo '<option value="'.$patlist[$i]['p_id'].'" selected="selected">'.$patlist[$i]['title'].$patlist[$i]['full_name'].'</option>';
@@ -88,6 +92,22 @@
 		  	</select>
 		  	</div>
 			</div>
+			
+			<div class="form-group">
+    		<label class="col-md-3 control-label">DOB</label>
+    		<div class="col-sm-9">
+      		<p class="form-control-static" id="dob">Please select patient name</p>
+    		</div>
+  			</div>
+			
+			<div class="form-group">
+    		<label class="col-md-3 control-label">Address</label>
+    		<div class="col-sm-9">
+      		<p class="form-control-static" id="p_address">Please select patient name</p>
+    		</div>
+  			</div>
+			
+			
 			  		
   		</div><!-- panel body -->
 	</div><!-- panel -->
@@ -139,13 +159,6 @@
 		
 		</div><!-- panel body -->
 	</div><!-- panel -->
-		  	
-	
-	  
-	
-
-	  
-	
 	  
 	   
   
@@ -201,19 +214,18 @@
 		    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
 		    </div>
 		  	</div>
+		  	
+		  	<div class="form-group">
+	     	<label for="details" class="col-md-3 control-label"></label>
+	    	<div class="col-md-9">
+	     	<button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Save</button>		     
+	     	<a class="btn btn-primary btn-md btn-large" href="<?php echo site_url('prescriptions/index')?>" role="button">Cancel</a>
+	     	</div>
+	    	</div>
+		  	
   		
 		</div><!-- panel body -->
 		</div><!-- panel -->
-	  
-	  
-	  
-	     <div class="form-group">
-	     <label for="details" class="col-md-6 control-label"></label>
-	    <div class="col-md-6">
-	     <button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Save</button>	     
-	     <a class="btn btn-primary btn-md btn-large" href="<?php echo site_url('prescriptions/index')?>" role="button">Cancel</a>
-	     </div>
-	    </div>	
 	  	  	  
 	</div><!--  end of col -->
 	
@@ -243,7 +255,29 @@ function validate(){
 	
 	
 }
-		
+
+function get_patient_details(sel){
+	var p_id =sel.value;
+	url='<?php echo site_url("/prescriptions/get_patient_by_id")?>/'+p_id;
+    $.ajax({
+        url: url, 
+        success: function(result){
+           
+        	var data = result.split('::');
+        	var dob = data[5];//dob
+        	var address = data[3];//address
+        	var nic_no = data[4];//address
+        	var contact_no = data[1] +' / '+ data[2]; //contact nos
+        	
+        	$('#p_address').html(address);        		
+        	$('#dob').html(dob);  
+        	
+    	},
+    	error: function(xhr){
+    	        alert('Request Status: ' + xhr.status + ' Status Text: ' + xhr.statusText + ' ' + xhr.responseText);
+    	}
+    });	
+}
 		
 function check_val(sel){}
 

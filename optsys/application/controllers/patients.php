@@ -20,7 +20,7 @@ class Patients extends CI_Controller {
 	
 
 	
-	public function add(){
+	public function add($from=null){
 	
 		$form_data = array();
 		$form_data['gen_message'] = null;		
@@ -50,7 +50,12 @@ class Patients extends CI_Controller {
 						$form_data['gen_message'] = array(
 								'type' => 'success',
 								'text' => 'Data saved!');
-						$this->redirect_home(site_url('patients/index'));
+						
+						if($from=='pres_form'){
+							$this->redirect_home(site_url('prescriptions/add'));
+						}else{
+							$this->redirect_home(site_url('patients/index'));
+						}	
 					}else{
 	
 						$form_data['gen_message'] = array(
