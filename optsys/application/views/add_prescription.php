@@ -26,15 +26,10 @@
   </div>
 </div>
 
-<form action="" method="post" class="form-horizontal">
-
-<div class="row">	
+<div class="col-sm-12">
 <h1>Add New Prescription</h1>	
-	
-	<div class="col-sm-12 col-md-6">
-	
-	
-	
+<div id="msg_div"></div>
+
 		  <?php 
 		  $msg = validation_errors();
 		  if(!empty($msg)){
@@ -63,7 +58,14 @@
 		  }		  
 		  ?>
 	
+</div>
+
+<div class="row">
+
+<form action="" method="post" class="form-horizontal" onsubmit="return validate()">
 	
+	<div class="col-sm-12 col-md-6">
+		  
 	 <div class="form-group">
 	    <label for="visited_date" class="col-md-6 control-label">Date</label>
 	    <div class="col-md-6">
@@ -75,10 +77,14 @@
 	<div class="form-group">
 		<label for="details" class="col-md-6 control-label">Patient Name</label>
 		<div class="col-md-6">
-  		<select class="selectpicker" name="p_id" id="p_id" data-live-search="true" onchange="">   
+  		<select class="selectpicker form-control" name="p_id" id="p_id" data-live-search="true" onchange="">   
     	<?php 
     	for($i=0;$i<count($patlist);$i++){
-    		echo '<option value="'.$patlist[$i]['p_id'].'" >'.$patlist[$i]['title'].$patlist[$i]['full_name'].'</option>';
+    		if( $fields['p_id'] == $patlist[$i]['p_id']){
+    			echo '<option value="'.$patlist[$i]['p_id'].'" selected="selected">'.$patlist[$i]['title'].$patlist[$i]['full_name'].'</option>';
+    		}else{
+    			echo '<option value="'.$patlist[$i]['p_id'].'" >'.$patlist[$i]['title'].$patlist[$i]['full_name'].'</option>';
+    		}	
     	}
     	?>    
   	</select>
@@ -90,8 +96,11 @@
 	 <div class="form-group">
 	    <label for="left_lens" class="col-md-6 control-label">Lens for Left Eye</label>	    
 	    <div class="col-md-6">
-	    <input type="text" class="form-control " id="left_lens" name="left_lens" placeholder="" value="">
-	    <input type="hidden" id="left_lens_from" name="left_lens_from" value="">
+	    <input type="text" class="form-control " id="left_lens" name="left_lens" placeholder="" value="<?php echo $fields['left_lens']?>">
+	    <input type="hidden" id="left_lens_from" name="left_lens_from" value="<?php echo $fields['left_lens_from']?>">
+	    <input type="hidden" id="left_lens_price" name="left_lens_price" value="<?php echo (isset($fields['left_lens_price']))?$fields['left_lens_price']:'0.00'?>">
+	    <input type="hidden" id="left_lens_sup_id" name="left_lens_sup_id" value="<?php echo $fields['left_lens_sup_id']?>">	    
+	    <input type="hidden" id="left_lens_order_det" name="left_lens_order_det" value="<?php echo $fields['left_lens_order_det']?>">
 	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('l_lens')">Select for Left Eye</a>	    
 	    </div>    
 	  </div>
@@ -99,8 +108,11 @@
 	 <div class="form-group">
 	    <label for="right_lens" class="col-md-6 control-label">Lens for Right Eye</label>	    
 	    <div class="col-md-6">
-	    <input type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="">
-	    <input type="hidden" id="right_lens_from" name="right_lens_from" value="">
+	    <input type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="<?php echo $fields['right_lens']?>">
+	    <input type="hidden" id="right_lens_from" name="right_lens_from" value="<?php echo $fields['right_lens_from']?>">	    
+	    <input type="hidden" id="right_lens_price" name="right_lens_price" value="<?php echo (isset($fields['right_lens_price']))?$fields['right_lens_price']:'0.00';?>">
+	    <input type="hidden" id="right_lens_sup_id" name="right_lens_sup_id" value="<?php echo $fields['right_lens_sup_id']?>">
+	    <input type="hidden" id="right_lens_order_det" name="right_lens_order_det" value="<?php echo $fields['right_lens_order_det']?>">
 	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('r_lens')">Select for Right Eye</a>	    
 	    </div>    
 	  </div>
@@ -109,35 +121,21 @@
 	  <div class="form-group">
 	    <label for="frame" class="col-md-6 control-label">Frame</label>
 	    <div class="col-md-6">	    
-	    <input type="text" class="form-control " id="frame" name="frame" placeholder="" value="">
-	    <input type="hidden" id="frame_from" name="frame_from" value="">	    
+	    <input type="text" class="form-control " id="frame" name="frame" placeholder="" value="<?php echo $fields['frame']?>">
+	    <input type="hidden" id="frame_from" name="frame_from" value="<?php echo $fields['frame_from']?>">
+	    <input type="hidden" id="frame_price" name="frame_price" value="<?php echo (isset($fields['frame_price']))?$fields['frame_price']:'0.00';?>">
+	    <input type="hidden" id="frame_sup_id" name="frame_sup_id" value="<?php echo $fields['frame_sup_id']?>">
+	    <input type="hidden" id="frame_order_det" name="frame_order_det" value="<?php echo $fields['frame_order_det']?>">	    
 	    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_frames()">Select Frame</a>	    
 	    </div>
 	  </div>
-	  
-	  
-	  <!-- 
-	 <div class="form-group">
-	    <label for="paid_by" class="col-md-6 control-label">Prescribe Lens</label>
-	    <div class="col-md-6">	    
-	    <?php 
-	    $other = ' class="form-control " id="paid_by" onchange="show_products(this)"';
-	    $products = array('Only Frame' => 'Only Frame','Only Lenses' => 'Only Lenses', 'Both Lens and Frame' => 'Both Lenses and Frame');
-	    //echo form_dropdown('products', $products,$fields['products'],$other);
-		?>
-		 <a class="btn btn-primary btn-md btn-large" href="#" role="button" onclick="show_products('lens')">Left</a>
-		 <a class="btn btn-primary btn-md btn-large" href="#" role="button" onclick="show_products('lens')">Right</a>     
-	     
-		</div>
-	  </div>
-	  -->	  
 	  
 	
 	  
 	<div class="form-group">
 		    <label for="total" class="col-md-6 control-label">Total</label>
 		    <div class="col-md-6">
-		    <input type="text" class="form-control " id="total" name="total" placeholder="" value="">
+		    <input type="text" class="form-control " id="total" name="total" placeholder="" value="<?php echo (isset($fields['total']))?$fields['total']:'0.00'?>">
 		    </div>
 	 </div>	  
 	  
@@ -194,7 +192,39 @@
 </div><!-- /.container --> 
 <script>
 
+function validate(){
+
+	var frame = $('#frame').val();
+	var left_lens = $('#left_lens').val();
+	var right_lens = $('#right_lens').val();
+
+	if(frame == ''  && left_lens == '' && right_lens == ''){
+		$('#msg_div').html(
+			  	'<div class="alert alert-warning alert-dismissible" role="alert">'+
+	  			'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+	  			'<strong>Warning!</strong>Please select a frame or lens(es) for the prescription'+
+				'</div>'		  	
+		
+				);
+		return false;
+	}else{	
+		return true;
+	}
+	
+	
+}
+		
+		
 function check_val(sel){}
+
+function cal_total(){
+
+	var frame_price = $('#frame_price').val();
+	var left_lens_price = $('#left_lens_price').val();
+	var right_lens_price = $('#right_lens_price').val();
+	tot = parseFloat(left_lens_price) + parseFloat(right_lens_price) + parseFloat(frame_price);
+	$('#total').val(tot);
+}
 
 function show_frames(){
 
@@ -241,7 +271,7 @@ myCalendar2 = new dhtmlXCalendarObject(["revisit_due_date"]);
 myCalendar.setInsensitiveRange("<?php echo date('Y-m-d')?>",null);
 myCalendar2.setSensitiveRange("<?php echo date('Y-m-d')?>",null);
 
-</script>
+
 
 </script>
 

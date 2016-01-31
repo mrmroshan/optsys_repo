@@ -41,22 +41,31 @@ class Prescriptions extends CI_Controller {
 				
 			//var_dump($post);exit;
 			/*
-			  'visited_date' => string '2016-01-26' (length=10)
-			   'p_id' => string '1' (length=1)
-  'left_lens' => string '2::+56::CR39 - Normal - Clear::Greenish red::3500' (length=49)
-  'left_lens_from' => string 'stock' (length=5)
-  'right_lens' => string '6::+20::CR39 - Photo Cromic::Red::4000' (length=38)
-  'right_lens_from' => string 'stock' (length=5)
-  'frame' => string '7::66::Memory Metal::Half-Eye Frames::66::66.66' (length=47)
-  'frame_from' => string 'stock' (length=5)
-  'total' => string '7566.66' (length=7)
-  'amount_paid' => string '7000' (length=4)
-  'paid_by' => string 'Cash' (length=4)
-  'details' => string 'testing' (length=7)
-  'btnSave' => string '' (length=0) 
+			  'visited_date' => string '2016-01-31' (length=10)
+			  'p_id' => string '1' (length=1)
+			  'left_lens' => string '2::+56::CR39 - Normal - Clear::Greenish red::3500' (length=49)
+			  'left_lens_from' => string 'stock' (length=5)
+			  'left_lens_price' => string '3500' (length=4)
+			  'left_lens_sup_id' => string '' (length=0)
+			  'left_lens_order_det' => string '' (length=0)
+			  'right_lens' => string '8::+45::CR39 - Normal - Tinted::Green::500' (length=42)
+			  'right_lens_from' => string 'stock' (length=5)
+			  'right_lens_price' => string '500' (length=3)
+			  'right_lens_sup_id' => string '' (length=0)
+			  'right_lens_order_det' => string '' (length=0)
+			  'frame' => string '8::77::Plastic::Full Rim Frames::77::77.77' (length=42)
+			  'frame_from' => string 'stock' (length=5)
+			  'frame_price' => string '77.77' (length=5)
+			  'frame_sup_id' => string '1' (length=1)
+			  'frame_order_det' => string 'test' (length=4)
+			  'total' => string '4077.77' (length=7)
+			  'amount_paid' => string '4000' (length=4)
+			  'paid_by' => string 'Cash' (length=4)
+			  'details' => string 'test' (length=4)
+			  'btnSave' => string '' (length=0)  
 			 * */
 			
-			$validation = true;//$this->validate_form();
+			$validation = $this->validate_form();
 			
 			if($validation){
 				
@@ -83,45 +92,84 @@ class Prescriptions extends CI_Controller {
 						//2add orderd product data into opt_pres_details
 						
 						$order_details=array();
+						$new_po_details=array();
 						$item_id = null;
 						
 						if(!empty($post['frame'])){
-							//'frame' => string '7::66::Memory Metal::Half-Eye Frames::66::66.66' (length=47)
-							$string =explode('::',$post['frame']);
-							$item_id=$string[0];
-							$price = $string[4];
-							$order_details[] = array(
-									'pre_id'=>$prs_id,
-									'item_id'=> $item_id,
-									'qty'=>1,
-									'sub_total'=>$price,
-									'prod_type'=>'frame',
-									'added_date'=>date("Y-m-d"),
-									'added_by'=>1
-							);
-						}											
+							if($post['frame_from'] == 'stock'){
+								
+								//'frame' => string '7::66::Memory Metal::Half-Eye Frames::66::66.66' (length=47)
+								$string =explode('::',$post['frame']);
+								$item_id=$string[0];
+								$price = $string[4];
+								$order_details = array(
+										'pre_id'=>$prs_id,
+										'item_id'=> $item_id,
+										'qty'=>1,
+										'sub_total'=>$price,
+										'prod_type'=>'frame',
+										'added_date'=>date("Y-m-d"),
+										'added_by'=>1
+								);
+								$result2 = $this->pres_order_details_model->save($order_details);
+								
+								//get frame info to deduct from stock then update stock
+								$item_record_set = $this->frames_model->select_records('*',null,null,array('frame_id'=>$item_id));
+								$item_result = $item_record_set['result_set'][0];
+								$item_qty = $item_result['qty'];
+								$new_item_qty = $item_qty-1;								 
+								$this->frames_model->update_record(array('qty'=>$new_item_qty),array('frame_id'=>$item_id));
+								
+							}else if($post['frame_from'] == 'order'){
+								
+								$new_po_details[]=array(
+										'pre_id'=>$prs_id,
+										'opt_suppliers_sup_id' => $post['frame_sup_id'],
+										'details'=>$post['frame_order_det'],
+										'added_date'=>date('Y-m-d'),
+										'added_by'=>1,
+										'po_status'=>'new'
+								);
+								
+							}
+						}//if end frame											
 						
 						if(!empty($post['left_lens'])){
-							//'left_lens' => string '2::+56::CR39 - Normal - Clear::Greenish red::3500' 
-							$string =explode('::',$post['left_lens']);
-							$item_id=$string[0];
-							$price = $string[4];
-							$order_details[] = array(
-									'pre_id'=>$prs_id,
-									'item_id'=> $item_id,
-									'qty'=>1,
-									'sub_total'=>$price,
-									'prod_type'=>'left_lens',
-									'added_date'=>date("Y-m-d"),
-									'added_by'=>1									
-							);
+							if($post['left_lens_from'] == 'stock'){
+								
+								//'left_lens' => string '2::+56::CR39 - Normal - Clear::Greenish red::3500'
+								$string =explode('::',$post['left_lens']);
+								$item_id=$string[0];
+								$price = $string[4];
+								$order_details = array(
+										'pre_id'=>$prs_id,
+										'item_id'=> $item_id,
+										'qty'=>1,
+										'sub_total'=>$price,
+										'prod_type'=>'left_lens',
+										'added_date'=>date("Y-m-d"),
+										'added_by'=>1
+								);
+								$result2 = $this->pres_order_details_model->save($order_details);
+								
+								//get lense info to deduct from stock then update stock
+								$item_record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$item_id));
+								$item_result = $item_record_set['result_set'][0];								
+								$item_qty = $item_result['qty'];
+								$new_item_qty = $item_qty-1;
+								$result4 = $this->lenses_model->update_record(array('qty'=>$new_item_qty),array('lens_id'=>$item_id));
+								var_dump($result4);
+								
+							}else if($post['left_lens_from'] == 'order'){
+								
+							}
 						}
 						if(!empty($post['right_lens'])){
 							//''right_lens' => string '6::+20::CR39 - Photo Cromic::Red::4000' (length=38)
 							$string =explode('::',$post['right_lens']);
 							$item_id=$string[0];
 							$price = $string[4];
-							$order_details[] = array(
+							$order_details= array(
 									'pre_id'=>$prs_id,
 									'item_id'=> $item_id,
 									'qty'=>1,
@@ -130,10 +178,9 @@ class Prescriptions extends CI_Controller {
 									'added_date'=>date("Y-m-d"),
 									'added_by'=>1
 							);
+							$result2 = $this->pres_order_details_model->save($order_details);
 						}
-						foreach($order_details as $order){
-							$result2 = $this->pres_order_details_model->save($order);
-						}
+						
 						
 						$form_data['gen_message'] = array(
 								'type' => 'success',
@@ -244,15 +291,11 @@ class Prescriptions extends CI_Controller {
 	private function validate_form($edit = false){	
 		
 		//do validation here
-		$this->form_validation->set_rules('sup_id', 'Supplier', 'required');
-		$this->form_validation->set_rules('cat_id', 'Category', 'required');
-		$this->form_validation->set_rules('lens_power', 'Lense Power', 'required');
-		$this->form_validation->set_rules('lens_color', 'Lens Color', 'required');
-		$this->form_validation->set_rules('qty', 'Qty', 'required|integer');		
-		$this->form_validation->set_rules('price', 'Lens Price', 'required|decimal');
-		$this->form_validation->set_rules('cost', 'Lens Cost', 'required|decimal');		
-		$this->form_validation->set_rules('re_order_qty', 'Re order qty', 'required|integer');		
-		
+		$this->form_validation->set_rules('visited_date', 'Date', 'required');
+		$this->form_validation->set_rules('p_id', 'Patient name', 'required');
+		$this->form_validation->set_rules('amount_paid', 'Amount Paid', 'required|float');
+		$this->form_validation->set_rules('total', 'Total', 'required|float');
+				
 		if($edit == false){
 				
 		}else{
@@ -266,7 +309,13 @@ class Prescriptions extends CI_Controller {
 	
 	public function select_products($product_type){
 
+		
+		$sup_record_set = $this->suppliers_model->select_records('*',1000,0);
+		$form_data['sup_list'] = $sup_record_set['result_set']; 
+		
 		$form_data['product_type'] = $product_type;
+		
+		
 		if($product_type == 'frame'){
 			$this->load->view('prescribe_frames',$form_data);
 		}else if($product_type == 'r_lens'){						
@@ -325,8 +374,6 @@ class Prescriptions extends CI_Controller {
 		$xml->initiate();
 	
 		foreach($record_set['result_set'] as $record ){
-
-			//Pres id   ,Visited Date ,Patione Name ,Due re visit date,Order Status, Bill Total, Paid Amount, Attended By
 			
 			$xml->startBranch('row',array('id' =>$record['pre_id']));
 			$action = '<a href="'.site_url('lenses/edit/'.$record['pre_id'].'').'" onclick="">Edit</a>  |
@@ -334,7 +381,11 @@ class Prescriptions extends CI_Controller {
 			$xml->addNode('cell',$action,null, true);
 			$xml->addNode('cell',$record['pre_id'],null, true);			
  			$xml->addNode('cell',$record['visited_date'],null, true);
- 			$xml->addNode('cell',$record['p_id'],null, true); 			
+ 			
+ 			$p_record_set = $this->patients_model->select_records('*',1,0,array('p_id' => $record['p_id']));
+ 			$patient = (empty($p_record_set['result_set']))?'-':$p_record_set['result_set'][0]['title'].$p_record_set['result_set'][0]['full_name']; 			
+ 			$xml->addNode('cell',$patient,null, true);
+ 			 			
  			$xml->addNode('cell',$record['revisit_due_date'],null, true); 			 			
  			$xml->addNode('cell',$record['order_status'],null, true);
  			$xml->addNode('cell',$record['priscript_total'],null, true);

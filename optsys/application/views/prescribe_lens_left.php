@@ -24,7 +24,48 @@ body{padding:0px;}
 				</div>	    
 		    </div><!-- tab1 -->
 		    <div role="tabpanel" class="tab-pane" id="order">
-		    tab 2
+		    	<div class="row">	
+					<div class="col-sm-12">
+						<p></p>
+						<?php //var_dump($sup_list);?>	
+						<div class="form-group">
+							<label for="details" class="col-md-6 control-label">Supplier Name</label>
+							<div class="col-md-6">
+					  		<select class="selectpicker form-control" name="sup_id" id="sup_id" data-live-search="true" onchange="">   
+					    	<?php 
+					    	for($i=0;$i<count($sup_list);$i++){
+					    		echo '<option value="'.$sup_list[$i]['sup_id'].'" >'.$sup_list[$i]['company_name'].'</option>';
+					    	}
+					    	?>    
+					  		</select>
+					  		</div>
+						</div>
+						
+						<div class="form-group">
+						    <label for="p_order_details" class="col-md-6 control-label">Lens Info</label>
+						    <div class="col-md-6">
+						    <input type="text" class="form-control " id="left_lens_info" name="left_lens_info" value="">
+						    </div>
+						  </div>
+						
+						 <div class="form-group">
+						    <label for="p_order_details" class="col-md-6 control-label">Order Details</label>
+						    <div class="col-md-6">
+						    <textarea class="form-control " id="p_order_details" name="p_order_details" ></textarea>
+						    </div>
+						  </div>
+						  
+					     <div class="form-group">
+						     <label for="details" class="col-md-6 control-label"></label>
+						     <div class="col-md-6">
+						     <button type="button"  name ="btnPOSave" class="btn btn-primary btn-md btn-large" onclick="place_order()">Place Order</button>	     
+						     <button type="button"  name ="btnPOCancel" class="btn btn-primary btn-md btn-large" onclick="cancel()">Cancel</button>
+						     </div>
+					    </div>	
+						  
+						  
+					</div><!-- end col -->
+				</div><!-- end row -->
 		    </div><!-- tab 2 -->    
 		    
 		  </div><!--  tab-contents -->	
@@ -72,18 +113,12 @@ function add_to_cart(lens_id){
         	$('#left_lens', window.parent.document).val(result);
         	$('#left_lens_from', window.parent.document).val("stock");
 
-
-        	var prev_tot = 0.00;
         	var tot = $('#total', window.parent.document).val();
         	var data = result.split('::');
         	var price = data[data.length - 1];//last element is price
-        	if(tot.length == 0){
-        		$('#total', window.parent.document).val(price);
-        	}else{
-				prev_tot = $('#total', window.parent.document).val();
-				tot = parseFloat(prev_tot) + parseFloat(price);
-				$('#total', window.parent.document).val(tot);
-            }
+        	$('#left_lens_price', window.parent.document).val(price);
+			parent.cal_total();	
+            
         	
     	},
     	error: function(xhr){
@@ -93,5 +128,23 @@ function add_to_cart(lens_id){
 
     window.parent.close_model(); 
 }
+
+function place_order(){
+
+	var sup_id = $('#sup_id').val();
+	var p_order_det = $('#p_order_details').val();
+	var lens_info = $('#left_lens_info').val(); 
+	$('#left_lens_from', window.parent.document).val("order");
+	$('#left_lens_sup_id', window.parent.document).val(sup_id);
+	$('#left_lens', window.parent.document).val(lens_info);	
+	$('#left_lens_order_det', window.parent.document).val(p_order_det);
+	window.parent.close_model(); 
+}
+
+function cancel(){
+	window.parent.close_model();
+}
+
+
 </script>
 
