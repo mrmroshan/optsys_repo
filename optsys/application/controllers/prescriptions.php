@@ -12,6 +12,7 @@ class Prescriptions extends CI_Controller {
 		$this->load->model('patients_model');
 		$this->load->model('frames_model');
 		$this->load->model('lenses_model');
+		$this->load->model('po_model');
 	}//end of function
 
 	/**
@@ -122,15 +123,15 @@ class Prescriptions extends CI_Controller {
 								
 							}else if($post['frame_from'] == 'order'){
 								
-								$new_po_details[]=array(
+								$new_po_details= array(
 										'pre_id'=>$prs_id,
-										'opt_suppliers_sup_id' => $post['frame_sup_id'],
+										'sup_id' => $post['frame_sup_id'],
 										'details'=>$post['frame_order_det'],
 										'added_date'=>date('Y-m-d'),
 										'added_by'=>1,
 										'po_status'=>'new'
 								);
-								
+								$po_result = $this->po_model->save($new_po_details);								
 							}
 						}//if end frame											
 						
@@ -158,28 +159,60 @@ class Prescriptions extends CI_Controller {
 								$item_qty = $item_result['qty'];
 								$new_item_qty = $item_qty-1;
 								$result4 = $this->lenses_model->update_record(array('qty'=>$new_item_qty),array('lens_id'=>$item_id));
-								var_dump($result4);
+								
 								
 							}else if($post['left_lens_from'] == 'order'){
-								
+								$new_po_details= array(
+										'pre_id'=>$prs_id,
+										'sup_id' => $post['left_lens_sup_id'],
+										'details'=>$post['left_lens_order_det'],
+										'added_date'=>date('Y-m-d'),
+										'added_by'=>1,
+										'po_status'=>'new'
+								);
+								$po_result = $this->po_model->save($new_po_details);
 							}
-						}
+						}//left lens
+						
+						
 						if(!empty($post['right_lens'])){
-							//''right_lens' => string '6::+20::CR39 - Photo Cromic::Red::4000' (length=38)
-							$string =explode('::',$post['right_lens']);
-							$item_id=$string[0];
-							$price = $string[4];
-							$order_details= array(
-									'pre_id'=>$prs_id,
-									'item_id'=> $item_id,
-									'qty'=>1,
-									'sub_total'=>$price,
-									'prod_type'=>'right_lens',
-									'added_date'=>date("Y-m-d"),
-									'added_by'=>1
-							);
-							$result2 = $this->pres_order_details_model->save($order_details);
-						}
+							
+							if($post['right_lens_from'] == 'stock'){
+								//''right_lens' => string '6::+20::CR39 - Photo Cromic::Red::4000' (length=38)
+								$string =explode('::',$post['right_lens']);
+								$item_id=$string[0];
+								$price = $string[4];
+								$order_details= array(
+										'pre_id'=>$prs_id,
+										'item_id'=> $item_id,
+										'qty'=>1,
+										'sub_total'=>$price,
+										'prod_type'=>'right_lens',
+										'added_date'=>date("Y-m-d"),
+										'added_by'=>1
+								);
+								$result2 = $this->pres_order_details_model->save($order_details);
+									
+								//get lense info to deduct from stock then update stock
+								$item_record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$item_id));
+								$item_result = $item_record_set['result_set'][0];
+								$item_qty = $item_result['qty'];
+								$new_item_qty = $item_qty-1;
+								$result4 = $this->lenses_model->update_record(array('qty'=>$new_item_qty),array('lens_id'=>$item_id));
+								
+							}else if($post['right_lens_from'] == 'order'){
+								$new_po_details= array(
+										'pre_id'=>$prs_id,
+										'sup_id' => $post['right_lens_sup_id'],
+										'details'=>$post['right_lens_order_det'],
+										'added_date'=>date('Y-m-d'),
+										'added_by'=>1,
+										'po_status'=>'new'
+								);
+								$po_result = $this->po_model->save($new_po_details);
+								
+							}							
+						}//end if right lens
 						
 						
 						$form_data['gen_message'] = array(
