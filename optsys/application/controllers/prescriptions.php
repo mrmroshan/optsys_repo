@@ -189,7 +189,8 @@ class Prescriptions extends CI_Controller {
 										'sub_total'=>$price,
 										'prod_type'=>'right_lens',
 										'added_date'=>date("Y-m-d"),
-										'added_by'=>1
+										'added_by'=>1,
+										'from'=>'stock'
 								);
 								$result2 = $this->pres_order_details_model->save($order_details);
 									
@@ -263,15 +264,58 @@ class Prescriptions extends CI_Controller {
 		$post = $this->input->post(null);
 		$form_data['fields'] = $post;
 		
+		//patients
+		$record_set = $this->patients_model->select_records('p_id,title,full_name',1000,null,null);
+		$form_data['patlist'] = $record_set['result_set'];
+
+		//prescription order details
+		$o_record_set = $this->pres_order_details_model->select_records('*',1000,null,array('pre_id'=>$id));
+		$form_data['orders'] = $o_record_set['result_set'];
+		//var_dump($form_data['orders']);
+		/*array (size=3)
+  0 => 
+    array (size=10)
+      'o_d_id' => string '5' (length=1)
+      'pre_id' => string '26' (length=2)
+      'item_id' => string '9' (length=1)
+      'qty' => string '1' (length=1)
+      'sub_total' => string '33' (length=2)
+      'added_by' => string '1' (length=1)
+      'updated_by' => null
+      'added_date' => string '2016-01-28' (length=10)
+      'updated_date' => null
+      'prod_type' => string 'frame' (length=5)
+  1 => 
+    array (size=10)
+      'o_d_id' => string '6' (length=1)
+      'pre_id' => string '26' (length=2)
+      'item_id' => string '1' (length=1)
+      'qty' => string '1' (length=1)
+      'sub_total' => string '30' (length=2)
+      'added_by' => string '1' (length=1)
+      'updated_by' => null
+      'added_date' => string '2016-01-28' (length=10)
+      'updated_date' => null
+      'prod_type' => string 'left_lens' (length=9)
+  2 => 
+    array (size=10)
+      'o_d_id' => string '7' (length=1)
+      'pre_id' => string '26' (length=2)
+      'item_id' => string '7' (length=1)
+      'qty' => string '1' (length=1)
+      'sub_total' => string '3400' (length=4)
+      'added_by' => string '1' (length=1)
+      'updated_by' => null
+      'added_date' => string '2016-01-28' (length=10)
+      'updated_date' => null
+      'prod_type' => string 'right_lens' (length=10)*/
+		
+		
 		//suplist
 		$record_set = $this->suppliers_model->select_records('*',200,null,null);
 		$form_data['suplist'] = $record_set['result_set'];
 		
-		//cat
-		$cat_record_set = $this->category_model->select_records('*',1000,null,null);
-		$form_data['catlist'] = $cat_record_set['result_set'];
-		
-		
+			
 		if(isset($post['btnSave'])){
 	
 			$form_data['fields'] = $post;
@@ -312,7 +356,7 @@ class Prescriptions extends CI_Controller {
 		//get record data
 		$record_set = $this->prescriptions_model->select_records('*',null,null,array('pre_id'=>$id));
 		$form_data['fields'] = $record_set['result_set'][0];
-		$this->load->view('edit_lens',$form_data);
+		$this->load->view('edit_prescription',$form_data);
 			
 	}//end of function
 	
@@ -344,7 +388,16 @@ class Prescriptions extends CI_Controller {
 
 		
 		$sup_record_set = $this->suppliers_model->select_records('*',1000,0);
-		$form_data['sup_list'] = $sup_record_set['result_set']; 
+		$form_data['sup_list'] = $sup_record_set['result_set'];
+
+		//lens cat
+		$cat_record_set = $this->category_model->select_records('*',1000,0);
+		$form_data['cat_list'] = $cat_record_set['result_set'];
+		
+		//lens
+		$lens_record_set = $this->lenses_model->select_records('*',1000,0);
+		$form_data['lens_list'] = $lens_record_set['result_set'];
+		
 		
 		$form_data['product_type'] = $product_type;
 		
@@ -407,8 +460,7 @@ class Prescriptions extends CI_Controller {
 		echo $str;
 	}
 	
-	
-	
+		
 	/**
 	 * This function is to produce dhtmlx grid
 	 * @param string $feed_type
@@ -427,7 +479,7 @@ class Prescriptions extends CI_Controller {
 		foreach($record_set['result_set'] as $record ){
 			
 			$xml->startBranch('row',array('id' =>$record['pre_id']));
-			$action = '<a href="'.site_url('lenses/edit/'.$record['pre_id'].'').'" onclick="">Edit</a>  |
+			$action = '<a href="'.site_url('prescriptions/edit/'.$record['pre_id'].'').'" onclick="">Edit</a>  |
 					   <a href="javascript:void(0);" onclick="delete_record('.$record['pre_id'].')">Delete</a> ';
 			$xml->addNode('cell',$action,null, true);
 			$xml->addNode('cell',$record['pre_id'],null, true);			

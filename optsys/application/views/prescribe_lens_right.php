@@ -43,7 +43,25 @@ body{padding:0px;}
 						<div class="form-group">
 						    <label for="p_order_details" class="col-md-6 control-label">Lens Info</label>
 						    <div class="col-md-6">
-						    <input type="text" class="form-control " id="right_lens_info" name="right_lens_info" value="">
+						    <select class="selectpicker form-control" name="left_lens_info" id="left_lens_info" data-live-search="true" onchange="">
+						    <?php
+						    for($i=0;$i<count($lens_list);$i++){						    	
+								 foreach($cat_list as $cat){
+								 	
+								 	if($cat['cat_id'] == $lens_list[$i]['cat_id']){
+								  		$cat_name= $cat['category'];
+								 	}
+								 }
+								 echo '<option value="'.$lens_list[$i]['lens_id'].'" >'.
+						    		$lens_list[$i]['lens_id'].'::'.
+						    		$lens_list[$i]['lens_power'].'::'.					    		
+						    		$cat_name.'::'.
+						    		$lens_list[$i]['lens_color'].'::'.
+						    		$lens_list[$i]['price'].
+						    	'</option>';
+						    }
+						    ?>
+						    </select>						    
 						    </div>
 						  </div>
 						
@@ -131,13 +149,18 @@ function place_order(){
 
 	var sup_id = $('#sup_id').val();
 	var p_order_det = $('#p_order_details').val();
-	var lens_info = $('#right_lens_info').val(); 
-	$('#right_lens_from', window.parent.document).val("order");
-	$('#right_lens_sup_id', window.parent.document).val(sup_id)
-	$('#right_lens', window.parent.document).val(lens_info);;	
-	$('#right_lens_order_det', window.parent.document).val(p_order_det);
-	
-	window.parent.close_model(); 
+	//var lens_info = $('#right_lens_info').val();
+	var lens_info = $("#right_lens_info option:selected").text();
+
+	if(lens_info.length !=0){
+		$('#right_lens_from', window.parent.document).val("order");
+		$('#right_lens_sup_id', window.parent.document).val(sup_id)
+		$('#right_lens', window.parent.document).val(lens_info);;	
+		$('#right_lens_order_det', window.parent.document).val(p_order_det);	
+		window.parent.close_model(); 
+	}else{
+		alert('Please enter lens information to order');
+	}
 }
 
 function cancel(){
