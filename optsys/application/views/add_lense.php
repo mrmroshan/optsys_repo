@@ -139,8 +139,9 @@
 	     <div class="form-group">
 	     <label for="details" class="col-md-6 control-label"></label>
 	    <div class="col-md-6">
-	     <button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Save</button>	     
-	     <a class="btn btn-primary btn-md btn-large" href="<?php echo site_url('lenses/index')?>" role="button">Cancel</a>
+	     <button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Save</button>
+	     	     
+	     <a class="btn btn-primary btn-md btn-large" href="<?php echo (($from!="pres_form"))?site_url('lenses/index'):site_url('prescriptions/add');?>" role="button">Cancel</a>
 	     </div>
 	    </div>	
 	  	  	  

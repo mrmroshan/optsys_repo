@@ -42,8 +42,9 @@ body{padding:0px;}
 						
 						<div class="form-group">
 						    <label for="p_order_details" class="col-md-6 control-label">Lens Info</label>
-						    <div class="col-md-6">
-						    <select class="selectpicker form-control" name="left_lens_info" id="left_lens_info" data-live-search="true" onchange="">
+						    <div class="col-md-4">
+						    <select class="selectpicker form-control" name="right_lens_info" id="right_lens_info" data-live-search="true" onchange="">
+						    <!-- <option value="" selected="selected">Please select</option>-->
 						    <?php
 						    for($i=0;$i<count($lens_list);$i++){						    	
 								 foreach($cat_list as $cat){
@@ -63,6 +64,10 @@ body{padding:0px;}
 						    ?>
 						    </select>						    
 						    </div>
+						    <div class="col-md-2">					     						    
+						     <button type="button"  name ="btnAddlens" class="btn btn-primary btn-md btn-large" onclick="add_new_lens()">Add New</button>
+						    </div>
+						    
 						  </div>
 						
 						
@@ -145,6 +150,12 @@ function add_to_cart(lens_id){
 
     window.parent.close_model(); 
 }
+
+function add_new_lens(){
+	parent.window.location.href="<?php echo site_url('/lenses/add/pres_form')?>";
+}
+
+
 function place_order(){
 
 	var sup_id = $('#sup_id').val();
@@ -157,6 +168,13 @@ function place_order(){
 		$('#right_lens_sup_id', window.parent.document).val(sup_id)
 		$('#right_lens', window.parent.document).val(lens_info);;	
 		$('#right_lens_order_det', window.parent.document).val(p_order_det);	
+
+		var data = lens_info.split('::');
+    	var price = parseFloat(data[data.length - 1]);//last element is price
+    	$('#right_lens_price', window.parent.document).val(price);
+    	parent.cal_total();
+		
+		
 		window.parent.close_model(); 
 	}else{
 		alert('Please enter lens information to order');

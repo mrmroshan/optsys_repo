@@ -44,7 +44,21 @@ body{padding:0px;}
 						<div class="form-group">
 						    <label for="p_order_details" class="col-md-6 control-label">Frame Info</label>
 						    <div class="col-md-6">
-						    <input type="text" class="form-control " id="frame_info" name="frame_info" value="">
+						    <select class="selectpicker form-control" name="frame_info" id="frame_info" data-live-search="true" onchange="">
+						    <!-- <option value="" selected="selected">Please select</option>-->
+						    <?php
+						    //7::66::Memory Metal::Half-Eye Frames::66::66.66
+						    for($i=0;$i<count($frames_list);$i++){						    	
+								 echo '<option value="'.$frames_list[$i]['frame_id'].'" >'.
+						    		$frames_list[$i]['frame_size'].'::'.
+						    		$frames_list[$i]['frame_material'].'::'.
+						    		$frames_list[$i]['frame_type'].'::'.
+						    		$frames_list[$i]['frame_brand'].'::'.
+						    		$frames_list[$i]['price'].
+						    	'</option>';
+						    }
+						    ?>
+						    </select>
 						    </div>
 						  </div>
 						
@@ -132,12 +146,19 @@ function place_order(){
 
 	var sup_id = $('#sup_id').val();
 	var p_order_det = $('#p_order_details').val();
-	var frame_info = $('#frame_info').val();
+	//var frame_info = $('#frame_info').val();
+	var frame_info = $("#frame_info option:selected").text();
 	if(frame_info.length != 0){
 		$('#frame_from', window.parent.document).val("order");
 		$('#frame_sup_id', window.parent.document).val(sup_id);
 		$('#frame', window.parent.document).val(frame_info);		
 		$('#frame_order_det', window.parent.document).val(p_order_det);
+
+		var data = frame_info.split('::');
+    	var price = parseFloat(data[data.length - 1]);//last element is price
+    	$('#frame_price', window.parent.document).val(price);
+    	parent.cal_total();
+		
 		window.parent.close_model();
 	}else{
 		alert('Please enter frame information to order');

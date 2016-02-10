@@ -397,6 +397,10 @@ class Prescriptions extends CI_Controller {
 		//lens
 		$lens_record_set = $this->lenses_model->select_records('*',1000,0);
 		$form_data['lens_list'] = $lens_record_set['result_set'];
+
+		//frames
+		$frames_record_set = $this->frames_model->select_records('*',1000,0);
+		$form_data['frames_list'] = $frames_record_set['result_set'];
 		
 		
 		$form_data['product_type'] = $product_type;

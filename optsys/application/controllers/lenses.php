@@ -23,12 +23,13 @@ class Lenses extends CI_Controller {
 	
 
 	
-	public function add(){
+	public function add($from=null){
 	
 		$form_data = array();
 		$form_data['gen_message'] = null;		
 		$post = $this->input->post(null);
 		$form_data['fields'] = $post;
+		$form_data['from']=$from;
 		
 		//suplist
 		$record_set = $this->suppliers_model->select_records('*',1000,null,null);
@@ -60,7 +61,13 @@ class Lenses extends CI_Controller {
 						$form_data['gen_message'] = array(
 								'type' => 'success',
 								'text' => 'Data saved!');
-						$this->redirect_home(site_url('lenses/index'));
+						
+						if($from=='pres_form'){
+							$this->redirect_home(site_url('prescriptions/add'));
+							
+						}else{
+							$this->redirect_home(site_url('lenses/index'));
+						}	
 					}else{
 	
 						$form_data['gen_message'] = array(

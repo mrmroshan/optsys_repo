@@ -26,6 +26,7 @@ class Patients extends CI_Controller {
 		$form_data['gen_message'] = null;		
 		$post = $this->input->post(null);
 		$form_data['fields'] = $post;
+		$form_data['from']=$from;
 	
 				
 		if(isset($post['btnSave'])){
