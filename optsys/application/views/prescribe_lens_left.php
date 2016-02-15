@@ -161,12 +161,22 @@ function place_order(){
 	var p_order_det = $('#p_order_details').val();
 	//var lens_info = $('#left_lens_info').val();
 	var lens_info = $("#left_lens_info option:selected").text(); 
+	
 	if(lens_info.length !=0){
 		$('#left_lens_from', window.parent.document).val("order");
 		$('#left_lens_sup_id', window.parent.document).val(sup_id);
 		$('#left_lens', window.parent.document).val(lens_info);	
 		$('#left_lens_order_det', window.parent.document).val(p_order_det);
 
+		/*
+		var right_lens_id = $('#right_lens', window.parent.document).val();
+		var right_lens_from = $('#right_lens_from', window.parent.document).val();
+		//check for same lens ids when ther is only 1 qty
+		if(right_lens_id.length !=0 && right_lens_from !='order'){
+			var data = right_lens.split('::');
+	    	var id = parseFloat(data[data.length - 1]);//first element is id
+		}
+		*/
 		var data = lens_info.split('::');
     	var price = parseFloat(data[data.length - 1]);//last element is price
     	$('#left_lens_price', window.parent.document).val(price);

@@ -49,7 +49,9 @@ body{padding:0px;}
 						    <?php
 						    //7::66::Memory Metal::Half-Eye Frames::66::66.66
 						    for($i=0;$i<count($frames_list);$i++){						    	
-								 echo '<option value="'.$frames_list[$i]['frame_id'].'" >'.
+								 echo '<option value="'.
+									$frames_list[$i]['frame_id'].'" >'.
+									$frames_list[$i]['frame_id'].'::'.
 						    		$frames_list[$i]['frame_size'].'::'.
 						    		$frames_list[$i]['frame_material'].'::'.
 						    		$frames_list[$i]['frame_type'].'::'.
