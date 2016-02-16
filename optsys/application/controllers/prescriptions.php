@@ -112,7 +112,7 @@ class Prescriptions extends CI_Controller {
 										'pre_id'=>$prs_id,
 										'item_id'=> $item_id,
 										'qty'=>1,
-										'sub_total'=>$price,
+										'item_price'=>$price,
 										'prod_type'=>'frame',
 										'from'=>$post['frame_from'],
 										'added_date'=>date("Y-m-d"),
@@ -160,7 +160,7 @@ class Prescriptions extends CI_Controller {
 										'item_id'=> $item_id,
 										'from'=>$post['left_lens_from'],
 										'qty'=>1,
-										'sub_total'=>$price,
+										'item_price'=>$price,
 										'prod_type'=>'left_lens',
 										'added_date'=>date("Y-m-d"),
 										'added_by'=>1
@@ -205,7 +205,7 @@ class Prescriptions extends CI_Controller {
 										'item_id'=> $item_id,
 										'from'=>$post['right_lens_from'],
 										'qty'=>1,
-										'sub_total'=>$price,
+										'item_price'=>$price,
 										'prod_type'=>'right_lens',
 										'added_date'=>date("Y-m-d"),
 										'added_by'=>1										
@@ -286,31 +286,59 @@ class Prescriptions extends CI_Controller {
 		$form_data['gen_message'] = null;
 		$form_data['form_data_val'] = null;		
 		$post = $this->input->post(null);
-		$form_data['fields'] = $post;
+		$form_data['fields'] = null;//$post;
 		
 		//patients
-		$record_set = $this->patients_model->select_records('p_id,title,full_name',1000,null,null);
+		$record_set = $this->patients_model->select_records('*',1000,null,null);
 		$form_data['patlist'] = $record_set['result_set'];
 
 		//prescription order details
 		$o_record_set = $this->pres_order_details_model->select_records('*',1000,null,array('pre_id'=>$id));
 		$form_data['orders'] = $o_record_set['result_set'];
-		$frame_strings = null;
-		$left_eye_lens_strings = null;
-		$right_eye_lens_string = null;
+		$total=null;
 		
 		foreach($o_record_set['result_set'] as $item){
 			if($item['prod_type'] == 'frame'){
 				$form_data['frame_strings'] = $this->get_frame_by_id($item['item_id'],false);
+				$form_data['frame_from'] = $item['from'];
+				$form_data['frame_price'] = $item['item_price'];
+				$total = $item['item_price'];
+				if($item['from']=='order'){
+					//get product order details from po table
+					$po_record_set = $this->po_model->select_records('*',1000,null,array('pre_id'=>$id,'item_id'=>$item['item_id']));
+					$po_det = $po_record_set['result_set'][0];					
+					$form_data['frame_sup_id'] = $po_det['sup_id'];
+						
+				}				
 			}else if($item['prod_type'] == 'left_lens'){
 				$form_data['left_eye_lens_strings'] = $this->get_lens_by_id($item['item_id'],false);
+				$form_data['left_lens_from'] = $item['from'];
+				$form_data['left_lens_price'] = $item['item_price'];
+				$total += $item['item_price']; 
+				if($item['from']=='order'){
+					//get product order details from po table
+					$po_record_set = $this->po_model->select_records('*',1000,null,array('pre_id'=>$id,'item_id'=>$item['item_id']));					
+					$po_det = $po_record_set['result_set'][0];					
+					$form_data['left_lens_sup_id'] = $po_det['sup_id'];
+														
+				}
+				
 			}else if($item['prod_type'] == 'right_lens'){
 				$form_data['right_eye_lens_strings'] = $this->get_lens_by_id($item['item_id'],false);
+				$form_data['right_lens_from'] = $item['from'];
+				$form_data['right_lens_price'] = $item['item_price'];
+				$total += $item['item_price'];
+				if($item['from']=='order'){
+					//get product order details from po table
+					$po_record_set = $this->po_model->select_records('*',1000,null,array('pre_id'=>$id,'item_id'=>$item['item_id']));
+					$po_det = $po_record_set['result_set'][0];					
+					$form_data['right_lens_sup_id'] = $po_det['sup_id'];
+				}
+				
 			}
 				
 		}
-		//var_dump($form_data['orders']);
-		
+		$form_data['total'] = number_format($total,2);
 			
 		//suplist
 		$record_set = $this->suppliers_model->select_records('*',200,null,null);

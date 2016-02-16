@@ -96,14 +96,31 @@
 			<div class="form-group">
     		<label class="col-md-3 control-label">DOB</label>
     		<div class="col-sm-9">
-      		<p class="form-control-static" id="dob">Please select patient name</p>
+      		<p class="form-control-static" id="dob">
+      		<?php 
+      		for($i=0;$i<count($patlist);$i++){
+      			if( $fields['p_id'] == $patlist[$i]['p_id']){
+      				echo $patlist[$i]['dob'];
+      			}
+      		}
+      		?>
+      		</p>
     		</div>
   			</div>
 			
 			<div class="form-group">
     		<label class="col-md-3 control-label">Address</label>
     		<div class="col-sm-9">
-      		<p class="form-control-static" id="p_address">Please select patient name</p>
+      		<p class="form-control-static" id="p_address">      		 
+      		<?php
+      		for($i=0;$i<count($patlist);$i++){
+      			if( $fields['p_id'] == $patlist[$i]['p_id']){
+      				echo $patlist[$i]['address'];
+      			}
+      		}
+      		?>
+      		
+      		</p>
     		</div>
   			</div>
 			
@@ -113,17 +130,17 @@
 	</div><!-- panel -->
 	
 	
-	
+	<?php //var_dump($orders)?>
 	<div class="panel panel-default">
-  		<div class="panel-heading">Lens(es)/Frame details</div>
+  		<div class="panel-heading">Lens/Frame details</div>
   		<div class="panel-body">
 				
 		 <div class="form-group">
 		    <label for="left_lens" class="col-md-3 control-label">Lens for Left Eye</label>	    
 		    <div class="col-md-9">
-		    <input type="text" class="form-control" id="left_lens" name="left_lens" placeholder="" value="<?php echo (isset($left_eye_lens_strings))?$left_eye_lens_strings:$fields['left_lens']?>">
-		    From:<input type="text" readonly class="form-control" id="left_lens_from" name="left_lens_from" value="<?php //echo $fields['left_lens_from']?>">
-		    Price:<input type="tex" class="form-control" id="left_lens_price" name="left_lens_price" value="<?php //echo (isset($fields['left_lens_price']))?$fields['left_lens_price']:'0.00'?>">
+		    <input readonly type="text" class="form-control" id="left_lens" name="left_lens" placeholder="" value="<?php echo (isset($left_eye_lens_strings))?$left_eye_lens_strings:$fields['left_lens']?>">
+		    From:<input type="text" readonly class="form-control" id="left_lens_from" name="left_lens_from" value="<?php echo (isset($left_lens_from))?$left_lens_from:null?>">
+		    Price:<input type="tex" class="form-control" id="left_lens_price" name="left_lens_price" value="<?php echo (isset($left_lens_price))?$left_lens_price:null?>" onblur="cal_total()">
 		    <input type="hidden" id="left_lens_sup_id" name="left_lens_sup_id" value="<?php //echo $fields['left_lens_sup_id']?>">	    
 		    <input type="hidden" id="left_lens_order_det" name="left_lens_order_det" value="<?php //echo $fields['left_lens_order_det']?>">
 		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('l_lens')">Select for Left Eye</a>	    
@@ -133,9 +150,9 @@
 		 <div class="form-group">
 		    <label for="right_lens" class="col-md-3 control-label">Lens for Right Eye</label>	    
 		    <div class="col-md-9">
-		    <input type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="<?php echo (isset($right_eye_lens_strings))?$right_eye_lens_strings:$fields['right_lens']?>">
-		    From:<input type="text" readonly class="form-control" id="right_lens_from" name="right_lens_from" value="<?php //echo $fields['right_lens_from']?>">	    
-		    Price:<input type="text" class="form-control" id="right_lens_price" name="right_lens_price" value="<?php //echo (isset($fields['right_lens_price']))?$fields['right_lens_price']:'0.00';?>">
+		    <input readonly type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="<?php echo (isset($right_eye_lens_strings))?$right_eye_lens_strings:$fields['right_lens']?>">
+		    From:<input type="text" readonly class="form-control" id="right_lens_from" name="right_lens_from" value="<?php echo (isset($right_lens_from))?$right_lens_from:null?>">	    
+		    Price:<input type="text" class="form-control" id="right_lens_price" name="right_lens_price" value="<?php echo (isset($right_lens_price))?$right_lens_price:null?>" onblur="cal_total()">
 		    <input type="hidden" id="right_lens_sup_id" name="right_lens_sup_id" value="<?php //echo $fields['right_lens_sup_id']?>">
 		    <input type="hidden" id="right_lens_order_det" name="right_lens_order_det" value="<?php //echo $fields['right_lens_order_det']?>">
 		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('r_lens')">Select for Right Eye</a>	    
@@ -146,9 +163,9 @@
 		  <div class="form-group">
 		    <label for="frame" class="col-md-3 control-label">Frame</label>
 		    <div class="col-md-9">	    
-		    <input type="text" class="form-control " id="frame" name="frame" placeholder="" value="<?php echo (isset($frame_strings))?$frame_strings:$fields['frame']?>">
-		    From:<input type="text" readonly class="form-control " id="frame_from" name="frame_from" value="<?php //echo $fields['frame_from']?>">
-		    Price:<input type="text"  class="form-control " id="frame_price" name="frame_price" value="<?php //echo (isset($fields['frame_price']))?$fields['frame_price']:'0.00';?>">
+		    <input readonly type="text" class="form-control " id="frame" name="frame" placeholder="" value="<?php echo (isset($frame_strings))?$frame_strings:$fields['frame']?>">
+		    From:<input type="text" readonly class="form-control " id="frame_from" name="frame_from" value="<?php echo (isset($frame_from))?$frame_from:null?>">
+		    Price:<input type="text"  class="form-control " id="frame_price" name="frame_price" value="<?php echo (isset($frame_price))?$frame_price:null?>" onblur="cal_total()">
 		    <input type="hidden" id="frame_sup_id" name="frame_sup_id" value="<?php //echo $fields['frame_sup_id']?>">
 		    <input type="hidden" id="frame_order_det" name="frame_order_det" value="<?php //echo $fields['frame_order_det']?>">	    
 		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_frames()">Select Frame</a>	    
@@ -183,7 +200,7 @@
 			<div class="form-group">
 		    <label for="total" class="col-md-3 control-label">Total</label>
 		    <div class="col-md-9">
-		    <input type="text" class="form-control " id="total" name="total" placeholder="" value="<?php echo (isset($fields['total']))?$fields['total']:'0.00'?>">
+		    <input type="text" class="form-control " id="total" name="total" placeholder="" value="<?php echo (isset($total))?$total:'0.00'?>">
 		    </div>
 	 		</div>	  
 	  
