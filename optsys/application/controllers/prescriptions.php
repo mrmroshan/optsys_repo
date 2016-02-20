@@ -41,31 +41,7 @@ class Prescriptions extends CI_Controller {
 		if(isset($post['btnSave'])){
 				
 			//var_dump($post);exit;
-			/*
-			  'visited_date' => string '2016-01-31' (length=10)
-			  'p_id' => string '1' (length=1)
-			  'left_lens' => string '2::+56::CR39 - Normal - Clear::Greenish red::3500' (length=49)
-			  'left_lens_from' => string 'stock' (length=5)
-			  'left_lens_price' => string '3500' (length=4)
-			  'left_lens_sup_id' => string '' (length=0)
-			  'left_lens_order_det' => string '' (length=0)
-			  'right_lens' => string '8::+45::CR39 - Normal - Tinted::Green::500' (length=42)
-			  'right_lens_from' => string 'stock' (length=5)
-			  'right_lens_price' => string '500' (length=3)
-			  'right_lens_sup_id' => string '' (length=0)
-			  'right_lens_order_det' => string '' (length=0)
-			  'frame' => string '8::77::Plastic::Full Rim Frames::77::77.77' (length=42)
-			  'frame_from' => string 'stock' (length=5)
-			  'frame_price' => string '77.77' (length=5)
-			  'frame_sup_id' => string '1' (length=1)
-			  'frame_order_det' => string 'test' (length=4)
-			  'total' => string '4077.77' (length=7)
-			  'amount_paid' => string '4000' (length=4)
-			  'paid_by' => string 'Cash' (length=4)
-			  'details' => string 'test' (length=4)
-			  'btnSave' => string '' (length=0)  
-			 * */
-			
+						
 			$validation = $this->validate_form();
 			
 			if($validation){
@@ -94,7 +70,7 @@ class Prescriptions extends CI_Controller {
 					
 					if($result>0){
 						
-						//2add orderd product data into opt_pres_details
+						//2 add orderd product data into opt_pres_details
 						
 						$order_details=array();
 						$new_po_details=array();
@@ -139,7 +115,8 @@ class Prescriptions extends CI_Controller {
 											'details'=>$post['frame_order_det'],
 											'added_date'=>date('Y-m-d'),
 											'added_by'=>1,
-											'po_status'=>'new'
+											'po_status'=>'new',
+											'product_type'=>'frame'											
 									);
 									$po_result = $this->po_model->save($new_po_details);
 								
@@ -186,7 +163,8 @@ class Prescriptions extends CI_Controller {
 										'details'=>$post['left_lens_order_det'],
 										'added_date'=>date('Y-m-d'),
 										'added_by'=>1,
-										'po_status'=>'new'
+										'po_status'=>'new',
+										'product_type'=>'left_lens'
 									);
 									$po_result = $this->po_model->save($new_po_details);
 								}
@@ -231,7 +209,8 @@ class Prescriptions extends CI_Controller {
 										'added_date'=>date('Y-m-d'),
 										'added_by'=>1,
 										'item_id'=> $item_id,
-										'po_status'=>'new'
+										'po_status'=>'new',
+											'product_type'=>'right_lens'
 									);
 									$po_result = $this->po_model->save($new_po_details);								
 								}							
@@ -279,7 +258,9 @@ class Prescriptions extends CI_Controller {
 	
 	public function edit($id){
 	
-		$this->output->enable_profiler(false);
+		$debug = false;
+		
+		$this->output->enable_profiler(true);
 	
 		$form_data = array();
 	
@@ -287,104 +268,359 @@ class Prescriptions extends CI_Controller {
 		$form_data['form_data_val'] = null;		
 		$post = $this->input->post(null);
 		$form_data['fields'] = null;//$post;
+		$form_data['right_eye_lens_strings'] = null;
+		$form_data['left_eye_lens_strings'] = null;
+		$form_data['frame_strings'] = null;
+			
+		if(isset($post['btnSave'])){
+			
 		
+			if($debug)var_dump($post);
+			
+			$validation = $this->validate_form();
+				
+			if($validation){
+			
+				//1 add to prescription table
+				$save_data = array(
+						'p_id' => $post['p_id'],
+						'visited_date'=>$post['visited_date'],
+						'order_status'=>'new',
+						'priscript_total'=>$post['total'],
+						'amount_paid'=>$post['amount_paid'],
+						'paid_by'=>$post['paid_by'],
+						'details'=>$post['details'],
+						'updated_date'=>date('Y-m-d'),
+						'updated_by'=>1
+				);
+				
+				$result = $this->prescriptions_model->update_record($save_data,array('pre_id'=>$id));
+				$prs_id = $id;
+				
+				//if($result>0){				
+					
+					$order_details=array();
+					$new_po_details=array();
+					$item_id = null;
+					$lens_chk_flag=false;
+				
+				
+					if(!empty($post['frame'])){
+						
+						$prev_frame_id = $post['prev_frame_id'];
+												
+						//var_dump($post['frame']);	
+						//'frame' => string '10::55::Titanium and Stainless Steel::Rimless Frames::test::40.44'
+						$string =explode('::',$post['frame']);
+						$item_id=$string[0];
+						$price = $string[5];
+						$order_details = array(
+								'pre_id'=>$prs_id,
+								'item_id'=> $item_id,
+								'qty'=>1,
+								'item_price'=>$price,
+								'prod_type'=>'frame',
+								'from'=>$post['frame_from'],
+								'updated_date'=>date("Y-m-d"),
+								'updated_by'=>1
+						);
+						$result2 = $this->pres_order_details_model->update_record(
+								$order_details,
+								array(
+										'pre_id'=>$prs_id,
+										'item_id'=>$prev_frame_id,
+										'prod_type'=>'frame'
+								));
+				
+					if($post['frame_from'] == 'stock'){
+
+						if($prev_frame_id != $item_id){
+							
+							//get frame info to deduct from stock then update stock qty
+							$item_qty = 0 ;
+							$new_item_qty =0;
+							$prev_item_qty =0;
+							$item_record_set = $this->frames_model->select_records('*',null,null,array('frame_id'=>$item_id));
+							$item_result = $item_record_set['result_set'][0];
+							$item_qty = $item_result['qty'];
+							$new_item_qty = $item_qty-1;
+							$this->frames_model->update_record(array('qty'=>$new_item_qty),array('frame_id'=>$item_id));
+							
+							//now reset previous item qty							
+							$prev_item_record_set = $this->frames_model->select_records('*',null,null,array('frame_id'=>$prev_frame_id));
+							$prev_item_result = $prev_item_record_set['result_set'][0];
+							$prev_item_qty = $prev_item_result['qty'];
+							$new_item_qty = $prev_item_qty+1;
+							$this->frames_model->update_record(array('qty'=>$new_item_qty),array('frame_id'=>$prev_frame_id));
+						}
+				
+						//of an order is turned into stock then delete previous entries from po table
+						$this->po_model->delete(array('pre_id'=>$prs_id,'product_type'=>'frame'));
+						
+							
+						//if its an order then add to pb tables
+					}else if($post['frame_from'] == 'order'){
+							
+							//first delete existing order
+							$this->po_model->delete(array('pre_id'=>$prs_id,'product_type'=>'frame'));
+							
+							$new_po_details= array(
+									'pre_id'=>$prs_id,
+									'sup_id' => $post['frame_sup_id'],
+									'item_id'=> $item_id,
+									'details'=>$post['frame_order_det'],
+									'added_date'=>date('Y-m-d'),
+									'added_by'=>1,
+									'po_status'=>'new',
+									'product_type'=>'frame'
+							);
+							$po_result = $this->po_model->save($new_po_details);							
+						}						
+					}//if end frame
+					
+					
+					///////////////
+					if(!empty($post['left_lens'])){
+					
+						$prev_left_lens_id = $post['prev_left_lens_id'];
+						
+						//var_dump($post['left_lens']);
+						//'left_lens' => string '8::+45::CR39 - Normal - Tinted::Green::500' (length=42)
+						$string =explode('::',$post['left_lens']);
+						$item_id=$string[0];
+						$price = $string[4];
+						$order_details = array(
+								'pre_id'=>$prs_id,
+								'item_id'=> $item_id,
+								'qty'=>1,
+								'item_price'=>$price,
+								'prod_type'=>'left_lens',
+								'from'=>$post['left_lens_from'],
+								'updated_date'=>date("Y-m-d"),
+								'updated_by'=>1
+						);
+						$result3 = $this->pres_order_details_model->update_record(
+								$order_details,
+								array(
+										'pre_id'=>$prs_id,
+										'item_id'=>$prev_left_lens_id,
+										'prod_type'=>'left_lens'
+								));
+					
+						if($post['left_lens_from'] == 'stock'){
+					
+							if($prev_left_lens_id != $item_id){
+
+								//get left info to deduct from stock then update stock qty
+								$item_qty = 0 ;
+								$new_item_qty =0;
+								$prev_item_qty =0;
+								$item_record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$item_id));
+								$item_result = $item_record_set['result_set'][0];
+								$item_qty = $item_result['qty'];
+								$new_item_qty = $item_qty-1;
+								$this->lenses_model->update_record(array('qty'=>$new_item_qty),array('lens_id'=>$item_id));
+									
+								
+								//now reset previous item qty
+								$prev_item_record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$prev_left_lens_id));
+								$prev_item_result = $prev_item_record_set['result_set'][0];
+								$prev_item_qty = $prev_item_result['qty'];
+								$new_item_qty = $prev_item_qty+1;
+								$this->lenses_model->update_record(array('qty'=>$new_item_qty),array('lens_id'=>$prev_left_lens_id));
+							}
+					
+							//of an order is turned into stock then delete previous entries from po table
+							$this->po_model->delete(array('pre_id'=>$prs_id,'product_type'=>'left_lens'));
+					
+								
+							//if its an order then add to pb tables
+						}else if($post['left_lens_from'] == 'order'){
+								
+							//first delete existing order
+							$this->po_model->delete(array('pre_id'=>$prs_id,'product_type'=>'left_lens'));
+								
+							$new_po_details= array(
+									'pre_id'=>$prs_id,
+									'sup_id' => $post['left_lens_sup_id'],
+									'item_id'=> $item_id,
+									'details'=>$post['left_lens_order_det'],
+									'added_date'=>date('Y-m-d'),
+									'added_by'=>1,
+									'po_status'=>'new',
+									'product_type'=>'left_lens'
+							);
+							$po_result = $this->po_model->save($new_po_details);
+						}
+					}//if end left lens
+					////////////
+
+					//for right lens
+					///////////////
+					if(!empty($post['right_lens'])){
+							
+						$prev_left_lens_id = $post['prev_right_lens_id'];
+					
+						//var_dump($post['right_lens']);
+						//'right_lens' => string '8::+45::CR39 - Normal - Tinted::Green::500' (length=42)
+						$string =explode('::',$post['right_lens']);
+						$item_id=$string[0];
+						$price = $string[4];
+						$order_details = array(
+								'pre_id'=>$prs_id,
+								'item_id'=> $item_id,
+								'qty'=>1,
+								'item_price'=>$price,
+								'prod_type'=>'right_lens',
+								'from'=>$post['right_lens_from'],
+								'updated_date'=>date("Y-m-d"),
+								'updated_by'=>1
+						);
+						$result3 = $this->pres_order_details_model->update_record(
+								$order_details,
+								array(
+										'pre_id'=>$prs_id,
+										'item_id'=>$prev_right_lens_id,
+										'prod_type'=>'right_lens'
+								));
+							
+						if($post['right_lens_from'] == 'stock'){
+								
+							if($prev_right_lens_id != $item_id){
+					
+								//get left info to deduct from stock then update stock qty
+								$item_qty = 0 ;
+								$new_item_qty =0;
+								$prev_item_qty =0;
+								$item_record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$item_id));
+								$item_result = $item_record_set['result_set'][0];
+								$item_qty = $item_result['qty'];
+								$new_item_qty = $item_qty-1;
+								$this->lenses_model->update_record(array('qty'=>$new_item_qty),array('lens_id'=>$item_id));
+									
+					
+								//now reset previous item qty
+								$prev_item_record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$prev_left_lens_id));
+								$prev_item_result = $prev_item_record_set['result_set'][0];
+								$prev_item_qty = $prev_item_result['qty'];
+								$new_item_qty = $prev_item_qty+1;
+								$this->lenses_model->update_record(array('qty'=>$new_item_qty),array('lens_id'=>$prev_left_lens_id));
+							}
+								
+							//of an order is turned into stock then delete previous entries from po table
+							$this->po_model->delete(array('pre_id'=>$prs_id,'product_type'=>'right_lens'));
+								
+					
+							//if its an order then add to pb tables
+						}else if($post['right_lens_from'] == 'order'){
+					
+							//first delete existing order
+							$this->po_model->delete(array('pre_id'=>$prs_id,'product_type'=>'right_lens'));
+					
+							$new_po_details= array(
+									'pre_id'=>$prs_id,
+									'sup_id' => $post['right_lens_sup_id'],
+									'item_id'=> $item_id,
+									'details'=>$post['right_lens_order_det'],
+									'added_date'=>date('Y-m-d'),
+									'added_by'=>1,
+									'po_status'=>'new',
+									'product_type'=>'right_lens'
+							);
+							$po_result = $this->po_model->save($new_po_details);
+						}
+					}//if end left lens
+					////////////
+								
+					
+					
+				//}//end if result check
+				
+				
+				
+			}//end if validation	
+				
+		}//end if submit check
+		
+		//get record data
+		$pre_record_set = $this->prescriptions_model->select_records('*',null,null,array('pre_id'=>$id));
+				
 		//patients
 		$record_set = $this->patients_model->select_records('*',1000,null,null);
 		$form_data['patlist'] = $record_set['result_set'];
-
+		
+		//suplist
+		$record_set = $this->suppliers_model->select_records('*',200,null,null);
+		$form_data['suplist'] = $record_set['result_set'];		
+		
 		//prescription order details
 		$o_record_set = $this->pres_order_details_model->select_records('*',1000,null,array('pre_id'=>$id));
 		$form_data['orders'] = $o_record_set['result_set'];
 		$total=null;
 		
+		if($debug)var_dump($form_data['orders']);
+		
 		foreach($o_record_set['result_set'] as $item){
+				
 			if($item['prod_type'] == 'frame'){
+		
+				//$this->session->set_userdata('prev_frame_id', $item['item_id']);
+				$form_data['prev_frame_id'] = $item['item_id'];
 				$form_data['frame_strings'] = $this->get_frame_by_id($item['item_id'],false);
 				$form_data['frame_from'] = $item['from'];
 				$form_data['frame_price'] = $item['item_price'];
 				$total = $item['item_price'];
+		
 				if($item['from']=='order'){
+						
 					//get product order details from po table
 					$po_record_set = $this->po_model->select_records('*',1000,null,array('pre_id'=>$id,'item_id'=>$item['item_id']));
-					$po_det = $po_record_set['result_set'][0];					
+					$po_det = $po_record_set['result_set'][0];
 					$form_data['frame_sup_id'] = $po_det['sup_id'];
-						
-				}				
+					$form_data['frame_order_det'] = $po_det['details'];
+		
+				}
 			}else if($item['prod_type'] == 'left_lens'){
+		
+				//$this->session->set_userdata('prev_left_lens_id', $item['item_id']);
+				$form_data['prev_left_lens_id'] = $item['item_id'];
 				$form_data['left_eye_lens_strings'] = $this->get_lens_by_id($item['item_id'],false);
 				$form_data['left_lens_from'] = $item['from'];
 				$form_data['left_lens_price'] = $item['item_price'];
-				$total += $item['item_price']; 
+				$total += $item['item_price'];
+				
 				if($item['from']=='order'){
 					//get product order details from po table
-					$po_record_set = $this->po_model->select_records('*',1000,null,array('pre_id'=>$id,'item_id'=>$item['item_id']));					
-					$po_det = $po_record_set['result_set'][0];					
+					$po_record_set = $this->po_model->select_records('*',1000,null,array('pre_id'=>$id,'item_id'=>$item['item_id']));
+					$po_det = $po_record_set['result_set'][0];
 					$form_data['left_lens_sup_id'] = $po_det['sup_id'];
-														
+					$form_data['left_lens_order_det'] = $po_det['details'];
 				}
-				
-			}else if($item['prod_type'] == 'right_lens'){
+		
+			}else 	if($item['prod_type'] == 'right_lens'){
+		
+				//$this->session->set_userdata('prev_right_lens_id', $item['item_id']);
+				$form_data['prev_right_lens_id'] = $item['item_id'];
 				$form_data['right_eye_lens_strings'] = $this->get_lens_by_id($item['item_id'],false);
 				$form_data['right_lens_from'] = $item['from'];
 				$form_data['right_lens_price'] = $item['item_price'];
 				$total += $item['item_price'];
+				
 				if($item['from']=='order'){
 					//get product order details from po table
 					$po_record_set = $this->po_model->select_records('*',1000,null,array('pre_id'=>$id,'item_id'=>$item['item_id']));
-					$po_det = $po_record_set['result_set'][0];					
+					$po_det = $po_record_set['result_set'][0];
 					$form_data['right_lens_sup_id'] = $po_det['sup_id'];
+					$form_data['right_lens_order_det'] = $po_det['details'];
 				}
-				
-			}
-				
-		}
-		$form_data['total'] = number_format($total,2);
-			
-		//suplist
-		$record_set = $this->suppliers_model->select_records('*',200,null,null);
-		$form_data['suplist'] = $record_set['result_set'];
 		
-			
-		if(isset($post['btnSave'])){
-	
-			$form_data['fields'] = $post;
-			$validation = $this->validate_form(true);
+			}
+		
+		}
 				
-			if($validation){
-					
-				//remove submit button from the array
-				foreach($post as $k => $v){
-					if($k == 'btnSave')unset($post[$k]);
-				}
-	
-				//if form data is valid
-				$save_data['updated_date'] = date('Y-m-d');
-				$save_data['updated_by'] = '1';
-				$save_data =$post;
-				
-	
-				$result = $this->prescriptions_model->update_record($save_data,array('pre_id'=>$id));
-	
-				if($result>0){
-					$form_data['gen_message'] = array(
-							'type' => 'success',
-							'text' => 'Data updated!');
-	
-					$this->redirect_home(site_url('lenses/index'));
-	
-				}else{
-					$form_data['gen_message'] = array(
-							'type' => 'error',
-							'text' => 'Data not updated!');
-				}//end if
-					
-			}//end if check
-				
-		}//end if submit check
-	
-		//get record data
-		$record_set = $this->prescriptions_model->select_records('*',null,null,array('pre_id'=>$id));
-		$form_data['fields'] = $record_set['result_set'][0];
+		$form_data['total'] = number_format($total,2,'.','');
+
+		$form_data['fields'] = $pre_record_set['result_set'][0];
 		$this->load->view('edit_prescription',$form_data);
 			
 	}//end of function
