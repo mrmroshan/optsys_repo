@@ -6,6 +6,8 @@ class Patients extends CI_Controller {
 	
 		parent::__construct();	
 		$this->load->model('patients_model');
+		$this->load->model('prescriptions_model');
+		$this->load->model('pres_order_details_model');
 	}//end of function
 
 	/**
@@ -90,7 +92,7 @@ class Patients extends CI_Controller {
 	
 	
 	
-	public function edit($id){
+	public function view($id){
 	
 		$this->output->enable_profiler(false);
 	
@@ -99,14 +101,45 @@ class Patients extends CI_Controller {
 		$form_data['gen_message'] = null;
 		$form_data['form_data_val'] = null;		
 		$post = $this->input->post(null);
-		$form_data['fields'] = $post;
+		$form_data['fields'] = $post;	
+		$result_set = $this->prescriptions_model-> select_records('*',1000, 0, array('p_id'=>$id));
+		$preses = $result_set['result_set'];
 		
+		
+		foreach($preses as $presc){
+			$prsc_id = $presc['pre_id'];
+			$order_result_set = $this->pres_order_details_model-> select_records('*',1000, 0, array('pre_id'=>$prsc_id));
+			$orders_list = $order_result_set['result_set'];
+			$preses[]['orders'] = $orders_list; 
+		}		
+		
+		$form_data['preses'] = $preses;
+	
+		//get record data
+		$record_set = $this->patients_model->select_records('*',null,null,array('p_id'=>$id));
+		$form_data['fields'] = $record_set['result_set'][0];
+		$this->load->view('view_patient',$form_data);
+			
+	}//end of function
+	
+
+	public function edit($id){
+	
+		$this->output->enable_profiler(false);
+	
+		$form_data = array();
+	
+		$form_data['gen_message'] = null;
+		$form_data['form_data_val'] = null;
+		$post = $this->input->post(null);
+		$form_data['fields'] = $post;
+	
 	
 		if(isset($post['btnSave'])){
 	
 			$form_data['fields'] = $post;
 			$validation = $this->validate_form(true);
-				
+	
 			if($validation){
 					
 				//remove submit button from the array
@@ -118,7 +151,7 @@ class Patients extends CI_Controller {
 				$save_data['updated_date'] = date('Y-m-d');
 				$save_data['updated_by'] = '1';
 				$save_data =$post;
-				
+	
 	
 				$result = $this->patients_model->update_record($save_data,array('p_id'=>$id));
 	
@@ -136,7 +169,7 @@ class Patients extends CI_Controller {
 				}//end if
 					
 			}//end if check
-				
+	
 		}//end if submit check
 	
 		//get record data
@@ -193,8 +226,9 @@ class Patients extends CI_Controller {
 
 			//"Lens Id,Categor,Color,Power,Price,Qty,Supplier,Details,Bill No,Added Date,Added by"
 			$xml->startBranch('row',array('id' =>$record['p_id']));
-			$action = '<a href="'.site_url('patients/edit/'.$record['p_id'].'').'" onclick="">Edit</a>  |
-					   <a href="javascript:void(0);" onclick="delete_record('.$record['p_id'].')">Delete</a> ';
+			$action = ' <a href="'.site_url('patients/View/'.$record['p_id'].'').'" onclick="">View</a>  |
+						<a href="'.site_url('patients/edit/'.$record['p_id'].'').'" onclick="">Edit</a>  |
+					    <a href="javascript:void(0);" onclick="delete_record('.$record['p_id'].')">Delete</a> ';
 			$xml->addNode('cell',$action,null, true);
 			$xml->addNode('cell',$record['p_id'],null, true);			
  			$xml->addNode('cell',$record['title'].$record['full_name'],null, true);
