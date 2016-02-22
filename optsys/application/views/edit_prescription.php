@@ -236,10 +236,10 @@
 		 <div class="form-group">
 		    <label for="left_lens" class="col-md-3 control-label">Lens for Left Eye</label>	    
 		    <div class="col-md-9">
-		    <input readonly type="text" class="form-control" id="left_lens" name="left_lens" placeholder="" value="<?php echo $left_eye_lens_strings?>">
+		    <input readonly type="text" class="form-control" id="left_lens" name="left_lens" placeholder="" value="<?php echo (isset($left_eye_lens_strings))?$left_eye_lens_strings:null?>">
 		    From:<input type="text" readonly class="form-control" id="left_lens_from" name="left_lens_from" value="<?php echo (isset($left_lens_from))?$left_lens_from:null?>">
 		    Price:<input type="tex" class="form-control" id="left_lens_price" name="left_lens_price" value="<?php echo (isset($left_lens_price))?$left_lens_price:null?>" onblur="cal_total()">
-		    <input type="hidden" id="prev_left_lens_id" name="prev_left_lens_id" value="<?php echo $prev_left_lens_id;?>">
+		    <input type="hidden" id="prev_left_lens_id" name="prev_left_lens_id" value="<?php echo (isset($prev_left_lens_id))?$prev_left_lens_id:null;?>">
 		    <input type="hidden" id="left_lens_sup_id" name="left_lens_sup_id" value="<?php echo (isset($left_lens_sup_id))?$left_lens_sup_id:null;?>">	    
 		    <input type="hidden" id="left_lens_order_det" name="left_lens_order_det" value="<?php echo (isset($left_lens_order_det))?$left_lens_order_det:null;?>">
 		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('l_lens')">Select for Left Eye</a>	    
@@ -249,10 +249,10 @@
 		 <div class="form-group">
 		    <label for="right_lens" class="col-md-3 control-label">Lens for Right Eye</label>	    
 		    <div class="col-md-9">
-		    <input readonly type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="<?php echo $right_eye_lens_strings?>">
+		    <input readonly type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="<?php echo (isset($right_eye_lens_strings))?$right_eye_lens_strings:null?>">
 		    From:<input type="text" readonly class="form-control" id="right_lens_from" name="right_lens_from" value="<?php echo (isset($right_lens_from))?$right_lens_from:null?>">	    
 		    Price:<input type="text" class="form-control" id="right_lens_price" name="right_lens_price" value="<?php echo (isset($right_lens_price))?$right_lens_price:null?>" onblur="cal_total()">
-		    <input type="hidden" id="prev_right_lens_id" name="prev_right_lens_id" value="<?php echo $prev_right_lens_id;?>">
+		    <input type="hidden" id="prev_right_lens_id" name="prev_right_lens_id" value="<?php echo (isset($prev_right_lens_id))?$prev_right_lens_id:null;?>">
 		    <input type="hidden" id="right_lens_sup_id" name="right_lens_sup_id" value="<?php echo (isset($right_lens_sup_id))?$right_lens_sup_id:null;?>">
 		    <input type="hidden" id="right_lens_order_det" name="right_lens_order_det" value="<?php echo (isset($right_lens_order_det))?$right_lens_order_det:null;?>">
 		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('r_lens')">Select for Right Eye</a>	    
@@ -263,10 +263,10 @@
 		  <div class="form-group">
 		    <label for="frame" class="col-md-3 control-label">Frame</label>
 		    <div class="col-md-9">	    
-		    <input readonly type="text" class="form-control " id="frame" name="frame" placeholder="" value="<?php echo (isset($frame_strings))?$frame_strings:$fields['frame']?>">
+		    <input readonly type="text" class="form-control " id="frame" name="frame" placeholder="" value="<?php echo (isset($frame_strings))?$frame_strings:null?>">
 		    From:<input type="text" readonly class="form-control " id="frame_from" name="frame_from" value="<?php echo (isset($frame_from))?$frame_from:null?>">
 		    Price:<input type="text"  class="form-control " id="frame_price" name="frame_price" value="<?php echo (isset($frame_price))?$frame_price:null?>" onblur="cal_total()">
-		    <input type="hidden" id="prev_frame_id" name="prev_frame_id" value="<?php echo $prev_frame_id;?>">
+		    <input type="hidden" id="prev_frame_id" name="prev_frame_id" value="<?php echo (isset($prev_frame_id))?$prev_frame_id:null;?>">
 		    <input type="hidden" id="frame_sup_id" name="frame_sup_id" value="<?php echo (isset($frame_sup_id))?$frame_sup_id:null;?>">
 		    <input type="hidden" id="frame_order_det" name="frame_order_det" value="<?php echo (isset($frame_order_det))?$frame_order_det:null;?>">	    
 		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_frames()">Select Frame</a>	    

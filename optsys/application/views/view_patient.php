@@ -106,26 +106,38 @@
   	</div>
   	<div class="panel-body">
 	
+	<?php if(!empty($preses)){?>
 	<table class="table table-bordered table-striped">
   	<tr>
   	<th>Pres Id</th>
   	<th>Date Visited</th>
   	<th>Lens/Frame Details</th>
-  	<th>Total Due</th>
-  	<th>Total Paid</th>
+  	<th>Lens/Frame Collected Date</th>
+  	<th>Total Amount</th>
+  	<th>Paid Amount</th>
+  	<th>Details</th>
   	</tr>
   	<?php foreach($preses as $pres){?>
   	<tr>
   		<td><?php echo $pres['pre_id']?></td>
-  		<td><?php echo $pres['pre_id']?></td>
-  		<td><?php echo $pres['pre_id']?></td>
-  		<td><?php echo $pres['pre_id']?></td>
-  		<td><?php echo $pres['pre_id']?></td>
+  		<td><?php echo $pres['visited_date']?></td>
+  		<td>
+  		<?php 
+  		foreach($pres['orders'] as $order){
+  			echo $order.'<br>';	
+  		}  		
+  		?>
+  		</td>
+  		<td><?php echo $pres['orders_collected_date']?></td>
+  		<td><?php echo $pres['priscript_total']?></td>
+  		<td><?php echo $pres['amount_paid']?></td>
+  		<td><?php echo $pres['details']?></td>
   	</tr>
-  	<?php }?>
-  	
+  	<?php }?>  	
 	</table>
-	<?php var_dump($preses)?>
+	<?php }else{?>
+		No records found!
+	<?php }?>
 	</div><!-- panel body -->
 	</div><!-- panel -->
 	

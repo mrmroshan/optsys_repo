@@ -757,22 +757,23 @@ class Prescriptions extends CI_Controller {
 	
 		foreach($record_set['result_set'] as $record ){
 			
-			$xml->startBranch('row',array('id' =>$record['pre_id']));
+			$p_record_set = $this->patients_model->select_records('*',1,0,array('p_id' => $record['p_id']));
+			$patient = (empty($p_record_set['result_set']))?'-':$p_record_set['result_set'][0]['title'].$p_record_set['result_set'][0]['full_name'];
+			
 			$action = '<a href="'.site_url('prescriptions/edit/'.$record['pre_id'].'').'" onclick="">Edit</a>  |
-					   <a href="javascript:void(0);" onclick="delete_record('.$record['pre_id'].')">Delete</a> ';
-			$xml->addNode('cell',$action,null, true);
-			$xml->addNode('cell',$record['pre_id'],null, true);			
- 			$xml->addNode('cell',$record['visited_date'],null, true);
- 			
- 			$p_record_set = $this->patients_model->select_records('*',1,0,array('p_id' => $record['p_id']));
- 			$patient = (empty($p_record_set['result_set']))?'-':$p_record_set['result_set'][0]['title'].$p_record_set['result_set'][0]['full_name']; 			
- 			$xml->addNode('cell',$patient,null, true);
- 			 			
- 			$xml->addNode('cell',$record['revisit_due_date'],null, true); 			 			
- 			$xml->addNode('cell',$record['order_status'],null, true);
- 			$xml->addNode('cell',$record['priscript_total'],null, true);
- 			$xml->addNode('cell',$record['amount_paid'],null, true);
- 			$xml->addNode('cell',$record['added_by'],null, true);
+					   <a href="javascript:void(0);" onclick="delete_record('.$record['pre_id'].')">Delete</a> ';				
+			
+			$xml->startBranch('row',array('id' =>$record['pre_id']));
+			$xml->addNode('cell',$action,null, true);							//Action
+			$xml->addNode('cell',$record['pre_id'],null, true);					//Pres Id	
+ 			$xml->addNode('cell',$record['visited_date'],null, true); 			//Visited Date 			
+ 			$xml->addNode('cell',$patient,null, true);							//Patient Name
+ 			$xml->addNode('cell',$record['order_status'],null, true);			//Order Status
+ 			$xml->addNode('cell',$record['orders_collected_date'],null, true);  //Order Collected Date
+ 			$xml->addNode('cell',$record['patient_informed'],null, true); 		//Patient Informed	
+ 			$xml->addNode('cell',$record['priscript_total'],null, true);		//Total Amount
+ 			$xml->addNode('cell',$record['amount_paid'],null, true);			//Paid Amount	
+ 			$xml->addNode('cell',$record['added_by'],null, true);				//Added By
 
 			$xml->endBranch();	
 		}

@@ -57,12 +57,12 @@
 mygrid = new dhtmlXGridObject('gridbox');
 mygrid.setImagePath("<?php echo base_url('dhtmlx/dhtmlxGrid/codebase/imgs')?>");
 mygrid.setSkin("dhx_skyblue");
-mygrid.setHeader    ("Action ,Pres id   ,Visited Date ,Patione Name ,Due re visit date,Order Status, Bill Total, Paid Amount, Attended By");
-mygrid.setColSorting("str    ,int       ,str          ,str          , str             , str        , int       , int        , str");
-mygrid.setInitWidths("100    ,80        ,150          ,200          ,80               , 80         , 100       ,100         ,100 ");
-mygrid.setColAlign  ("center ,right     ,left         ,left         , left            , left       , left      , left       , left");
-mygrid.setColTypes  ("ro,ro,ro,ro,ro,ro,ro,ro,ro");
-mygrid.attachHeader ("#rspan,#text_filter,#text_filter,#text_filter,#text_filter,#text_filter,#text_filter,#rspan,#rspan");
+mygrid.setHeader    ("Action ,Pres Id   ,Visited Date ,Patient Name ,Order Status,Items Collected Date,Patient Informed, Total Amount, Paid Amount, Added By");
+mygrid.setColSorting("str    ,int       ,str          ,str          , str        , str        		  , str            , int         , int        , str");
+mygrid.setInitWidths("100    ,80        ,150          ,200          , 150         , 100                , 80              , 50            , 100        , 100 ");
+mygrid.setColAlign  ("center ,right     ,left         ,left         , center       , left               , center           , right        , right        , left");
+mygrid.setColTypes  ("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
+mygrid.attachHeader ("#rspan,#text_filter,#text_filter,#text_filter,#select_filter,#text_filter,#text_filter,#rspan,#rspan,#rspan");
 mygrid.init();
 mygrid.load("<?php echo site_url("/prescriptions/produce_grid_feed/1000/0")?>");
 

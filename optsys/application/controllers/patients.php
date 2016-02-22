@@ -8,6 +8,9 @@ class Patients extends CI_Controller {
 		$this->load->model('patients_model');
 		$this->load->model('prescriptions_model');
 		$this->load->model('pres_order_details_model');
+		$this->load->model('frames_model');
+		$this->load->model('lenses_model');
+		$this->load->model('category_model');
 	}//end of function
 
 	/**
@@ -104,14 +107,46 @@ class Patients extends CI_Controller {
 		$form_data['fields'] = $post;	
 		$result_set = $this->prescriptions_model-> select_records('*',1000, 0, array('p_id'=>$id));
 		$preses = $result_set['result_set'];
-		
+		$i=0;
 		
 		foreach($preses as $presc){
 			$prsc_id = $presc['pre_id'];
 			$order_result_set = $this->pres_order_details_model-> select_records('*',1000, 0, array('pre_id'=>$prsc_id));
 			$orders_list = $order_result_set['result_set'];
-			$preses[]['orders'] = $orders_list; 
-		}		
+			foreach($orders_list as $order){
+				
+					/* 'o_d_id' => string '121' (length=3)
+					 'pre_id' => string '84' (length=2)
+					 'item_id' => string '10' (length=2)
+					 'qty' => string '1' (length=1)
+					 'sub_total' => null
+					 'added_by' => string '1' (length=1)
+					 'updated_by' => string '1' (length=1)
+					 'added_date' => string '2016-02-20' (length=10)
+					 'updated_date' => string '2016-02-20' (length=10)
+					 'prod_type' => string 'frame' (length=5)
+					 'from' => string 'stock' (length=5)
+					 'item_price' => string '40.44' (length=5)
+					 'sup_id' => null*/
+				$item_id = $order['item_id'];
+				$item_price=$order['item_price'];
+				$item_type=$order['prod_type'];
+				$from=$order['from'];
+				if($item_type=='frame'){
+					$frame_str = $this->get_frame_by_id($item_id,false);
+					$preses[$i]['orders'][] = $frame_str;
+				}else if($item_type=='left_lens'){
+					$left_lens_str = $this->get_lens_by_id($item_id,false);
+					$preses[$i]['orders'][] = $left_lens_str;
+				}else if($item_type=='right_lens'){
+					$right_lens_str = $this->get_lens_by_id($item_id,false);
+					$preses[$i]['orders'][] = $right_lens_str;
+				}//endif												
+					
+			}//end foreach						 
+		}//end foreach pres	
+		
+		
 		
 		$form_data['preses'] = $preses;
 	
@@ -123,6 +158,47 @@ class Patients extends CI_Controller {
 	}//end of function
 	
 
+	public function get_frame_by_id($frame_id,$output=true){
+	
+		$record_set = $this->frames_model->select_records('*',null,null,array('frame_id'=>$frame_id));
+		$result = $record_set['result_set'][0];
+		$frm_str = $result['frame_id'].'::'.
+				$result['frame_size'].'::'.
+				$result['frame_material'].'::'.
+				$result['frame_type'].'::'.
+				$result['frame_brand'].'::'.
+				$result['price'];
+		if($output){
+			echo $frm_str;
+		}else{
+			return $frm_str;
+		}
+	}
+	
+	
+	public function get_lens_by_id($lens_id,$output=true){
+	
+		$record_set = $this->lenses_model->select_records('*',null,null,array('lens_id'=>$lens_id));
+		$result = $record_set['result_set'][0];
+	
+		$cat_record_set = $this->category_model->select_records('*',1,0,array('cat_id' => $result['cat_id']));
+		$cat = (empty($cat_record_set['result_set']))?'-':$cat_record_set['result_set'][0]['category'];
+	
+	
+		$str = $result['lens_id'].'::'.
+				$result['lens_power'].'::'.
+				$cat.'::'.
+				$result['lens_color'].'::'.
+				$result['price'];
+		if($output){
+			echo $str;
+		}else{
+			return $str;
+		}
+	}
+	
+	
+	
 	public function edit($id){
 	
 		$this->output->enable_profiler(false);
