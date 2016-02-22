@@ -280,13 +280,16 @@ class Prescriptions extends CI_Controller {
 			$validation = $this->validate_form();
 				
 			if($validation){
-			
+				
+				$collected_date = ($post['order_status']==='Completed')? date('Y-m-d'):null;
+				
 				//1 add to prescription table
 				$save_data = array(
 						'p_id' => $post['p_id'],
 						'visited_date'=>$post['visited_date'],
 						'order_status'=>$post['order_status'],
 						'patient_informed'=>$post['patient_informed'],
+						'orders_collected_date'=>$collected_date,
 						'priscript_total'=>$post['total'],
 						'amount_paid'=>$post['amount_paid'],
 						'paid_by'=>$post['paid_by'],
@@ -532,8 +535,11 @@ class Prescriptions extends CI_Controller {
 						}
 					}//if end left lens
 					////////////
-								
 					
+					$form_data['gen_message'] = array(
+							'type' => 'success',
+							'text' => 'Data Updated!');
+					$this->redirect_home(site_url('prescriptions/index'));					
 					
 				//}//end if result check
 				
