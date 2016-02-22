@@ -50,7 +50,7 @@ class Prescriptions extends CI_Controller {
 				$save_data = array(
 						'p_id' => $post['p_id'],
 						'visited_date'=>$post['visited_date'],
-						'order_status'=>'new',
+						'order_status'=>'New',
 						'priscript_total'=>$post['total'],
 						'amount_paid'=>$post['amount_paid'],
 						'paid_by'=>$post['paid_by'],
@@ -285,7 +285,8 @@ class Prescriptions extends CI_Controller {
 				$save_data = array(
 						'p_id' => $post['p_id'],
 						'visited_date'=>$post['visited_date'],
-						'order_status'=>'new',
+						'order_status'=>$post['order_status'],
+						'patient_informed'=>$post['patient_informed'],
 						'priscript_total'=>$post['total'],
 						'amount_paid'=>$post['amount_paid'],
 						'paid_by'=>$post['paid_by'],
@@ -459,7 +460,7 @@ class Prescriptions extends CI_Controller {
 					///////////////
 					if(!empty($post['right_lens'])){
 							
-						$prev_left_lens_id = $post['prev_right_lens_id'];
+						$prev_right_lens_id = $post['prev_right_lens_id'];
 					
 						//var_dump($post['right_lens']);
 						//'right_lens' => string '8::+45::CR39 - Normal - Tinted::Green::500' (length=42)
@@ -619,7 +620,8 @@ class Prescriptions extends CI_Controller {
 		}
 				
 		$form_data['total'] = number_format($total,2,'.','');
-
+		$form_data['order_status'] = $pre_record_set['result_set'][0]['order_status'];
+		$form_data['patient_informed'] =  $pre_record_set['result_set'][0]['patient_informed'];
 		$form_data['fields'] = $pre_record_set['result_set'][0];
 		$this->load->view('edit_prescription',$form_data);
 			

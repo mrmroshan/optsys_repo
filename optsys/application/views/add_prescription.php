@@ -112,64 +112,9 @@
   		</div><!-- panel body -->
 	</div><!-- panel -->
 	
-	
-	
-	<div class="panel panel-default">
-  		<div class="panel-heading">Lens(es)/Frame details</div>
-  		<div class="panel-body">
-				
-		 <div class="form-group">
-		    <label for="left_lens" class="col-md-3 control-label">Lens for Left Eye</label>	    
-		    <div class="col-md-9">
-		    <input type="text" class="form-control" id="left_lens" name="left_lens" placeholder="" value="<?php echo $fields['left_lens']?>">
-		    From:<input type="text" readonly class="form-control" id="left_lens_from" name="left_lens_from" value="<?php echo $fields['left_lens_from']?>">
-		    Price:<input type="tex" class="form-control" id="left_lens_price" name="left_lens_price" value="<?php echo (isset($fields['left_lens_price']))?$fields['left_lens_price']:'0.00'?>">
-		    <input type="hidden" id="left_lens_sup_id" name="left_lens_sup_id" value="<?php echo $fields['left_lens_sup_id']?>">	    
-		    <input type="hidden" id="left_lens_order_det" name="left_lens_order_det" value="<?php echo $fields['left_lens_order_det']?>">
-		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('l_lens')">Select for Left Eye</a>	    
-		    </div>    
-		  </div>
-		
-		 <div class="form-group">
-		    <label for="right_lens" class="col-md-3 control-label">Lens for Right Eye</label>	    
-		    <div class="col-md-9">
-		    <input type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="<?php echo $fields['right_lens']?>">
-		    From:<input type="text" readonly class="form-control" id="right_lens_from" name="right_lens_from" value="<?php echo $fields['right_lens_from']?>">	    
-		    Price:<input type="text" class="form-control" id="right_lens_price" name="right_lens_price" value="<?php echo (isset($fields['right_lens_price']))?$fields['right_lens_price']:'0.00';?>">
-		    <input type="hidden" id="right_lens_sup_id" name="right_lens_sup_id" value="<?php echo $fields['right_lens_sup_id']?>">
-		    <input type="hidden" id="right_lens_order_det" name="right_lens_order_det" value="<?php echo $fields['right_lens_order_det']?>">
-		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('r_lens')">Select for Right Eye</a>	    
-		    </div>    
-		  </div>
-		  	  
-	
-		  <div class="form-group">
-		    <label for="frame" class="col-md-3 control-label">Frame</label>
-		    <div class="col-md-9">	    
-		    <input type="text" class="form-control " id="frame" name="frame" placeholder="" value="<?php echo $fields['frame']?>">
-		    From:<input type="text" readonly class="form-control " id="frame_from" name="frame_from" value="<?php echo $fields['frame_from']?>">
-		    Price:<input type="text"  class="form-control " id="frame_price" name="frame_price" value="<?php echo (isset($fields['frame_price']))?$fields['frame_price']:'0.00';?>">
-		    <input type="hidden" id="frame_sup_id" name="frame_sup_id" value="<?php echo $fields['frame_sup_id']?>">
-		    <input type="hidden" id="frame_order_det" name="frame_order_det" value="<?php echo $fields['frame_order_det']?>">	    
-		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_frames()">Select Frame</a>	    
-		    </div>
-		  </div>
-	  		
-		
-		
-		</div><!-- panel body -->
-	</div><!-- panel -->
-	  
 	   
-  
-	
-	</div><!-- end of col-sm-12-->  
-	
-	<div class="col-sm-12 col-md-6">	  
-	
-	  
 	  	<div class="panel panel-default">
-  		<div class="panel-heading">Transaction details</div>
+  		<div class="panel-heading">Transaction Details</div>
   		<div class="panel-body">
   		
   			<div class="form-group">
@@ -226,6 +171,59 @@
   		
 		</div><!-- panel body -->
 		</div><!-- panel -->
+	
+	
+	</div><!-- end of col-sm-12-->  
+	
+	<div class="col-sm-12 col-md-6">	  
+	
+	
+	<div class="panel panel-default">
+  		<div class="panel-heading">Lens/Frame Details</div>
+  		<div class="panel-body">
+				
+		 <div class="form-group">
+		    <label for="left_lens" class="col-md-3 control-label">Lens for Left Eye</label>	    
+		    <div class="col-md-9">
+		    <input type="text" class="form-control" id="left_lens" name="left_lens" placeholder="" value="<?php echo $fields['left_lens']?>">
+		    From:<input type="text" readonly class="form-control" id="left_lens_from" name="left_lens_from" value="<?php echo $fields['left_lens_from']?>">
+		    Price:<input type="tex" class="form-control" id="left_lens_price" name="left_lens_price" value="<?php echo (isset($fields['left_lens_price']))?$fields['left_lens_price']:'0.00'?>">
+		    <input type="hidden" id="left_lens_sup_id" name="left_lens_sup_id" value="<?php echo $fields['left_lens_sup_id']?>">	    
+		    <input type="hidden" id="left_lens_order_det" name="left_lens_order_det" value="<?php echo $fields['left_lens_order_det']?>">
+		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('l_lens')">Select for Left Eye</a>	    
+		    </div>    
+		  </div>
+		
+		 <div class="form-group">
+		    <label for="right_lens" class="col-md-3 control-label">Lens for Right Eye</label>	    
+		    <div class="col-md-9">
+		    <input type="text" class="form-control " id="right_lens" name="right_lens" placeholder="" value="<?php echo $fields['right_lens']?>">
+		    From:<input type="text" readonly class="form-control" id="right_lens_from" name="right_lens_from" value="<?php echo $fields['right_lens_from']?>">	    
+		    Price:<input type="text" class="form-control" id="right_lens_price" name="right_lens_price" value="<?php echo (isset($fields['right_lens_price']))?$fields['right_lens_price']:'0.00';?>">
+		    <input type="hidden" id="right_lens_sup_id" name="right_lens_sup_id" value="<?php echo $fields['right_lens_sup_id']?>">
+		    <input type="hidden" id="right_lens_order_det" name="right_lens_order_det" value="<?php echo $fields['right_lens_order_det']?>">
+		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_lens('r_lens')">Select for Right Eye</a>	    
+		    </div>    
+		  </div>
+		  	  
+	
+		  <div class="form-group">
+		    <label for="frame" class="col-md-3 control-label">Frame</label>
+		    <div class="col-md-9">	    
+		    <input type="text" class="form-control " id="frame" name="frame" placeholder="" value="<?php echo $fields['frame']?>">
+		    From:<input type="text" readonly class="form-control " id="frame_from" name="frame_from" value="<?php echo $fields['frame_from']?>">
+		    Price:<input type="text"  class="form-control " id="frame_price" name="frame_price" value="<?php echo (isset($fields['frame_price']))?$fields['frame_price']:'0.00';?>">
+		    <input type="hidden" id="frame_sup_id" name="frame_sup_id" value="<?php echo $fields['frame_sup_id']?>">
+		    <input type="hidden" id="frame_order_det" name="frame_order_det" value="<?php echo $fields['frame_order_det']?>">	    
+		    <a class="btn btn-primary btn-md btn-large-inline" href="#" role="button" onclick="show_frames()">Select Frame</a>	    
+		    </div>
+		  </div>
+	  		
+		
+		
+		</div><!-- panel body -->
+	</div><!-- panel -->
+	
 	  	  	  
 	</div><!--  end of col -->
 	

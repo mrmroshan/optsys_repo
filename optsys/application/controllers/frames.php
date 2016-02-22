@@ -222,7 +222,7 @@ class Frames extends CI_Controller {
 			
 				$xml->startBranch('row',array('id' =>$record['frame_id']));
 				if(empty($reason)){
-					$action = '<a href="javascript:void(0);" onclick="edit_record('.$record['frame_id'].')">Edit</a>  |
+					$action = '<a href="'.site_url('frames/edit/'.$record['frame_id'].'').'" onclick="">Edit</a>  |
 						   <a href="javascript:void(0);" onclick="delete_record('.$record['frame_id'].')">Delete</a> ';
 				}else if($reason='for-prescribe'){
 					if($record['qty'] >= 1){
@@ -237,11 +237,11 @@ class Frames extends CI_Controller {
 				$xml->addNode('cell',$record['frame_size'],null, true);
 				$xml->addNode('cell',$record['frame_serial_no'],null, true);
 				$xml->addNode('cell',$record['frame_material'],null, true);
-				$xml->addNode('cell',$record['frame_type'],null, true);
-				$sup_record_set = $this->suppliers_model->select_records('*',1,0,array('sup_id' => $record['sup_id']));			
-				$xml->addNode('cell',$sup_record_set['result_set'][0]['company_name'],null, true);
+				$xml->addNode('cell',$record['frame_type'],null, true);				
 				$xml->addNode('cell',$record['price'],null, true);
 				$xml->addNode('cell',$record['qty'],null, true);	
+				$sup_record_set = $this->suppliers_model->select_records('*',1,0,array('sup_id' => $record['sup_id']));
+				$xml->addNode('cell',$sup_record_set['result_set'][0]['company_name'],null, true);
 				$xml->addNode('cell',$record['added_date'],null, true);
 				$xml->endBranch();		
 			

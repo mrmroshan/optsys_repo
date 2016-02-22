@@ -4,11 +4,13 @@
 <form action="" method="post" class="form-horizontal">
 
 	<div class="row">	
-
+	<div class="col-sm-12 col-md-6 col-md-offset-3">
+	<br>
 	
-	<div class="col-sm-12 col-md-6 col-md-offset-2">
+		<div class="panel panel-default">
+  		<div class="panel-heading">Add Lens</div>
+  		<div class="panel-body">
 	
-	<h1>Add Lens</h1>	
 	
 		  <?php 
 		  $msg = validation_errors();
@@ -40,16 +42,16 @@
 	
 	
 	<div class="form-group">
-	    <label for="bill_no" class="col-md-6 control-label">Bill No</label>
-	    <div class="col-md-6">
+	    <label for="bill_no" class="col-md-3 control-label">Bill No</label>
+	    <div class="col-md-9">
 	    <input type="text" class="form-control " id="bill_no" name="bill_no" placeholder="Bill_no" value="<?php echo $fields['bill_no']?>">
 	    </div>
 	  </div>
 	
 	
 	 <div class="form-group">
-	    <label for="sup_id" class="col-md-6 control-label">Lens Supplier</label>
-	    <div class="col-md-6">	    
+	    <label for="sup_id" class="col-md-3 control-label">Lens Supplier</label>
+	    <div class="col-md-9">	    
 	    <?php 
 	    $other = ' class="form-control " id="sup_id" onchange="check_val(this)"';
 	    for($i=0;$i<count($suplist);$i++){
@@ -63,8 +65,8 @@
 	
 	
 	<div class="form-group">
-	    <label for="cat_id" class="col-md-6 control-label">Lens Category</label>
-	    <div class="col-md-6">	    
+	    <label for="cat_id" class="col-md-3 control-label">Lens Category</label>
+	    <div class="col-md-9">	    
 	    <?php 
 	    $other = ' class="form-control " id="cat_id"';
 	    for($i=0;$i<count($catlist);$i++){
@@ -78,16 +80,16 @@
 	
 
 	  <div class="form-group">
-		    <label for="lens_power" class="col-md-6 control-label">Lens Power</label>
-		    <div class="col-md-6">
+		    <label for="lens_power" class="col-md-3 control-label">Lens Power</label>
+		    <div class="col-md-9">
 		    <input type="text" class="form-control " id="lens_power" name="lens_power" placeholder="Power" value="<?php echo $fields['lens_power']?>">
 		    </div>
 	 </div> 
 	 	  
 	
 	  <div class="form-group">
-	    <label for="lens_color" class="col-md-6 control-label">Lens Color</label>
-	    <div class="col-md-6">
+	    <label for="lens_color" class="col-md-3 control-label">Lens Color</label>
+	    <div class="col-md-9">
 	    <input type="text" class="form-control " id="lens_color" name="lens_color" placeholder="Color" value="<?php echo $fields['lens_color']?>">
 	    </div>
 	  </div> 
@@ -99,15 +101,15 @@
 	
 
 		  <div class="form-group">
-	    <label for="qty" class="col-md-6 control-label">Qty</label>
-	    <div class="col-md-6">
+	    <label for="qty" class="col-md-3 control-label">Qty</label>
+	    <div class="col-md-9">
 	    <input type="text" class="form-control " id="qty" name="qty" placeholder="Qty" value="<?php echo $fields['qty']?>">
 	    </div>
 
 	    </div> 
 	  	  <div class="form-group">
-	    <label for="re_order_qty" class="col-md-6 control-label">Re Order Qty</label>
-	    <div class="col-md-6">
+	    <label for="re_order_qty" class="col-md-3 control-label">Re Order Qty</label>
+	    <div class="col-md-9">
 	    <input type="text" class="form-control " id="re_order_qty" name="re_order_qty" placeholder="Re order qty" value="<?php echo $fields['re_order_qty']?>">
 	    </div>
 	  </div> 
@@ -116,34 +118,38 @@
 	
 	  
 	  <div class="form-group">
-	    <label for="price" class="col-md-6 control-label">Price</label>
-	    <div class="col-md-6">	    
+	    <label for="price" class="col-md-3 control-label">Price</label>
+	    <div class="col-md-9">	    
 	    <input type="text" class="form-control " id="price" name="price" placeholder="Price" value="<?php echo $fields['price']?>" >
 	  	</div>
 	  </div>
 	  
 	  <div class="form-group">
-	    <label for="cost" class="col-md-6 control-label">Cost</label>
-	    <div class="col-md-6">	    
+	    <label for="cost" class="col-md-3 control-label">Cost</label>
+	    <div class="col-md-9">	    
 	    <input type="text" class="form-control " id="cost" name="cost" placeholder="Cost" value="<?php echo $fields['cost']?>" >
 	  	</div>
 	  </div>
 	  
 	 <div class="form-group">
-	    <label for="details" class="col-md-6 control-label">Description</label>
-	    <div class="col-md-6">
+	    <label for="details" class="col-md-3 control-label">Description</label>
+	    <div class="col-md-9">
 	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
 	    </div>
 	  </div>
 	  
 	     <div class="form-group">
-	     <label for="details" class="col-md-6 control-label"></label>
-	    <div class="col-md-6">
+	     <label for="details" class="col-md-3 control-label"></label>
+	    <div class="col-md-9">
 	     <button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Save</button>
 	     	     
 	     <a class="btn btn-primary btn-md btn-large" href="<?php echo (($from!="pres_form"))?site_url('lenses/index'):site_url('prescriptions/add');?>" role="button">Cancel</a>
 	     </div>
-	    </div>	
+	    </div>
+	    
+	 </div><!-- panel body -->
+	</div><!-- panel -->
+	    	
 	  	  	  
 	</div><!--  end of col -->
 	

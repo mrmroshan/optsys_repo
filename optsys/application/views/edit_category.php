@@ -4,10 +4,13 @@
 <form action="" method="post" class="form-horizontal">
 
 	<div class="row">	
-	<div class="col-sm-12 col-md-6 col-md-offset-2">
+	<div class="col-sm-12 col-md-6 col-md-offset-3">
 	
-	<h1>Edit Category</h1>	
-	
+	<br>
+	<div class="panel panel-default">
+  	<div class="panel-heading">Edit Lens Category</div>
+  	<div class="panel-body">	
+		
 		  <?php 
 		  $msg = validation_errors();
 		  if(!empty($msg)){
@@ -37,30 +40,32 @@
 		  ?>
 		
 	<div class="form-group">
-	    <label for="category" class="col-md-6 control-label">Category Name</label>
-	    <div class="col-md-6">
+	    <label for="category" class="col-md-3 control-label">Category Name</label>
+	    <div class="col-md-9">
 	    <input type="text" class="form-control " id="category" name="category" placeholder="Category" value="<?php echo $fields['category']?>">
 	    </div>
 	  </div>
 
 	  
 	 <div class="form-group">
-	    <label for="details" class="col-md-6 control-label">Details</label>
-	    <div class="col-md-6">
+	    <label for="details" class="col-md-3 control-label">Details</label>
+	    <div class="col-md-9">
 	    <textarea class="form-control " id="details" name="details" ><?php echo $fields['details']?></textarea>
 	    </div>
 	  </div>
 	  
 	  <div class="form-group">
-	     <label for="details" class="col-md-6 control-label"></label>
-	    <div class="col-md-6">
+	     <label for="details" class="col-md-3 control-label"></label>
+	    <div class="col-md-9">
 	     <button type="submit"  name ="btnSave" class="btn btn-primary btn-md btn-large">Update</button>	     
 	     <a class="btn btn-primary btn-md btn-large" href="<?php echo site_url('categories/index')?>" role="button">Cancel</a>
 	     </div>
 	  </div>	
-	  	  	  
-	</div><!--  end of col -->
-	
+
+	</div><!-- panel body -->
+	</div><!-- panel -->
+	  
+	</div><!--  end of col -->	
 	</div>	<!-- .row -->
 	</form>
 </div><!-- /.container --> 

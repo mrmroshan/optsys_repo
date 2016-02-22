@@ -109,12 +109,12 @@ $('#myTabs a').click(function (e) {
 mygrid = new dhtmlXGridObject('gridbox');
 mygrid.setImagePath("<?php echo base_url('dhtmlx/dhtmlxGrid/codebase/imgs')?>");
 mygrid.setSkin("dhx_skyblue");
-mygrid.setHeader("Action,Frame Id,Size,Frame Serial No,Material,Type,Supplier,Price,Qty,Added Date");
-mygrid.setColSorting("str,int,int,str,str,str,str,int,int");
-mygrid.setInitWidths("100,70,100,100,100,100,200,100,80,80,80");
-mygrid.setColAlign("center,right,right,right,right,right,right,right,right,right,right");
+mygrid.setHeader("Action,Frame Id,Size,Frame Serial No,Material,Type,Price,Qty,Supplier,Added Date");
+mygrid.setColSorting("str,int,int,str,str,int,int,str,int");
+mygrid.setInitWidths("70,70,100,100,100,100,80,50,200,100");
+mygrid.setColAlign("center,right,right,right,right,right,right,right,left,right");
 mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
-mygrid.attachHeader("#rspan,#text_filter,#text_filter,#text_filter,#rspan,#rspan,#select_filter,#rspan,#rspan,#rspan");
+mygrid.attachHeader("#rspan,#text_filter,#text_filter,#text_filter,#rspan,#rspan,#rspan,#rspan,#select_filter,#rspan");
 mygrid.init();
 mygrid.load("<?php echo site_url("/frames/produce_grid_feed/1000/0/for-prescribe")?>");
 
