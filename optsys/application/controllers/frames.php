@@ -5,6 +5,12 @@ class Frames extends CI_Controller {
 	function __construct(){
 	
 		parent::__construct();	
+		
+		//login check
+		$status = false;
+		$status = $this->acl->login_check();
+		if($status == false)redirect(site_url('home/login'));
+				
 		$this->load->model('frames_model');
 		$this->load->model('suppliers_model');
 		//$this->load->model('brands_model');

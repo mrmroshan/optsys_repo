@@ -4,7 +4,13 @@ class Lenses extends CI_Controller {
 	
 	function __construct(){
 	
-		parent::__construct();	
+		parent::__construct();
+		
+		//login check
+		$status = false;
+		$status = $this->acl->login_check();
+		if($status == false)redirect(site_url('home/login'));
+		
 		$this->load->model('lenses_model');
 		$this->load->model('suppliers_model');
 		$this->load->model('lenses_model');

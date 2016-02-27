@@ -33,6 +33,12 @@
             </li>
             <li><a href="#contact">Reports</a></li>
           </ul>
+          <div class="navbar-header pull-right">
+	    	<p class="navbar-text">
+        	<b>Hello, <?php echo $this->session->userdata('role');?></b>&nbsp;&nbsp;
+        	<a href="<?php echo site_url('home/logout')?>" class="navbar-link">Logout</a>&nbsp;
+    		</p>  
+		</div>
         </div><!--/.nav-collapse -->
       </div>
     </nav>   

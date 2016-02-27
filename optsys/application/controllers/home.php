@@ -1,13 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Home extends CI_Controller {
+	
+	function __construct(){
 
-	/**
-	 * index()	 
-	 * This function will handle default calls
-	 */
-	public function index()
-	{
+		parent::__construct();
 		$this->load->model('patients_model');
 		$this->load->model('prescriptions_model');
 		$this->load->model('pres_order_details_model');
@@ -15,6 +12,29 @@ class Home extends CI_Controller {
 		$this->load->model('lenses_model');
 		$this->load->model('category_model');
 		$this->load->model('suppliers_model');
+	}
+	
+		
+	public function login(){
+		$status = false;
+		$status = $this->acl->log_in();
+		if($status) redirect(site_url('home/index'));
+	}
+	
+	public function logout(){
+		$this->acl->log_out();
+		redirect(site_url('home/login'));
+	}
+	
+	/**
+	 * index()	 
+	 * This function will handle default calls
+	 */
+	public function index()
+	{
+		$status = false;
+		$status = $this->acl->login_check();	
+		if($status == false)redirect(site_url('home/login'));
 		
 		$prescriptions = $this->prescriptions_model->select_records('pre_id',9000, 0 );
 		$patients = $this->patients_model->select_records('p_id',9000, 0 );
@@ -39,11 +59,10 @@ class Home extends CI_Controller {
 		$form_data['no_of_categories'] =$categories['total_records'];
 		$form_data['no_of_suppliers'] = $suppliers['total_records'];
 		
-		$this->load->view('home',$form_data);
-	}
-	
-	
-}
+		$this->load->view('home',$form_data);		
+	}//end of function
+		
+}//end of class
 
 /* End of file welcome.php */
 /* Location: ./application/controllers/welcome.php */
